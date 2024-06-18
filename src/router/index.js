@@ -7,15 +7,49 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: HomeView,
+      children: [
+        {
+          path: '/backstage',
+          component: () => import('../views/HomeInnerPage/BackstageManager.vue')
+        },
+        {
+          path: '/memberaccount',
+          component: () => import('../views/HomeInnerPage/MemverAccount.vue')
+        },
+        {
+          path: '/fitnessdiary',
+          component: () => import('../views/HomeInnerPage/FitnessDiary.vue')
+        },
+        {
+          path: '/discount',
+          component: () => import('../views/HomeInnerPage/DiscountManager.vue')
+        },
+        {
+          path: '/popcoures',
+          component: () => import('../views/HomeInnerPage/PopCoures.vue')
+        },
+        {
+          path: '/course',
+          component: () => import('../views/HomeInnerPage/CourseView.vue')
+        },
+        {
+          path: '/bento',
+          component: () => import('../views/HomeInnerPage/BentoView.vue')
+        },
+        {
+          path: '/bentocontent',
+          component: () => import('../views/HomeInnerPage/BentoContent.vue')
+        },
+        {
+          path: '/coach',
+          component: () => import('../views/HomeInnerPage/CoachView.vue')
+        },
+        {
+          path: '/customserv',
+          component: () => import('../views/HomeInnerPage/CustomServ.vue')
+        }
+      ]
     }
   ]
 })
