@@ -2,7 +2,7 @@
   <section class="backstatelogin">
     <div class="login" id="login">
       <div class="loginpic">
-        <img src="#" alt="" />
+        <img src="/src/assets/img/small logo.png" alt="" />
       </div>
       <form action="#">
         <h2>管理員登入</h2>
@@ -20,33 +20,43 @@ import { MangerStory } from '/src/stores/MangerStory.js' // 引入 Pinia store
 export default {
   data() {
     return {
+      // 管理ID輸入框的值
       textData: '',
+      // 密碼輸入框的值
       pswData: ''
     }
   },
   methods: {
     async manLogin() {
       try {
-        const store = MangerStory() // 獲取 Pinia store 的實例
+        // 獲取 Pinia Store 的實例
+        const store = MangerStory()
 
+        // fetch 資料
         const response = await fetch(`${import.meta.env.BASE_URL}manger.json`)
         const users = await response.json()
 
+        // 查找用戶
         const loggedInUser = users.find(
           (u) => u.account === this.textData && u.password === this.pswData
         )
+
         if (loggedInUser) {
-          store.setCurrentUser(loggedInUser) // 設置當前用戶到 Pinia
-          alert('登入成功!')
-          this.textData = '' // 重置輸入框值
-          this.pswData = '' // 重置輸入框值
+          // 設置當前用戶到 Pinia
+          store.setCurrentUser(loggedInUser)
+          // 重置輸入框值
+          this.textData = ''
+          this.pswData = ''
+          // 跳轉到主頁
           this.$router.push('/home')
         } else {
-          alert('帳號或密碼錯誤!')
-          this.textData = '' // 重置輸入框值
-          this.pswData = '' // 重置輸入框值
+          // 顯示錯誤訊息
+          // 重置輸入框值
+          this.textData = ''
+          this.pswData = ''
         }
       } catch (error) {
+        // 顯示錯誤訊息
         console.error('登入失敗:', error)
         alert('登入失敗')
       }
@@ -63,6 +73,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(to right, #df944d, #71c4ef);
 }
 
 .login {
@@ -74,12 +85,15 @@ export default {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.614);
 }
 
 .loginpic {
   width: 30%;
   aspect-ratio: 2/1;
   img {
+    width: 100%;
+    aspect-ratio: 2/1;
     object-fit: cover;
     object-position: 50% 50%;
   }
@@ -94,6 +108,7 @@ export default {
   width: 50%;
   min-width: 250px;
   height: 100%;
+  gap: 5px;
 }
 
 .login p {

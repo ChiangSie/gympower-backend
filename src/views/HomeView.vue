@@ -2,7 +2,7 @@
   <section class="backendpage">
     <aside>
       <div class="logo">
-        <img src="#" alt="" />
+        <img src="/src/assets/img/small logo.png" alt="" />
       </div>
       <h2>後台管理</h2>
       <nav>
@@ -28,7 +28,13 @@
       </nav>
     </aside>
     <main>
-      <router-view />
+      <div class="mangeridshow">
+        <h2>後台管理者ID: {{ managerId }}</h2>
+        <button>登出</button>
+      </div>
+      <div class="showplace">
+        <router-view />
+      </div>
     </main>
   </section>
 </template>
@@ -59,6 +65,8 @@ hr {
       aspect-ratio: 2/1;
       margin: 15px auto;
       img {
+        width: 100%;
+        aspect-ratio: 2/1;
         object-fit: cover;
         object-position: 50% 50%;
       }
@@ -80,19 +88,30 @@ hr {
         padding: 10px;
         text-align: left;
         font-size: 1.2vw;
+        color: black;
       }
     }
   }
   main {
     width: calc(83% - 10px);
-    border: 1px black solid;
-    .loginaccount {
-      width: 100%;
-      padding: 20px;
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    // border: 1px black solid;
+    .mangeridshow {
       display: flex;
-      flex-direction: row;
       justify-content: flex-end;
-      align-self: center;
+      align-items: center;
+      button {
+        padding: 0 15px;
+        background-color: transparent;
+        border: 0.5px black solid;
+      }
+    }
+    .showplace {
+      border: 1px black solid;
+      width: 100%;
+      height: 100%;
     }
   }
 }
