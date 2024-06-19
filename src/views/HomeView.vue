@@ -29,8 +29,8 @@
     </aside>
     <main>
       <div class="mangeridshow">
-        <h2>後台管理者ID: {{ managerId }}</h2>
-        <button>登出</button>
+        <h2>使用者:{{ store.$state.currentAccount }}</h2>
+        <button class="sign-out" @click="memsignout()">登出</button>
       </div>
       <div class="showplace">
         <router-view />
@@ -39,7 +39,38 @@
   </section>
 </template>
 
-<script></script>
+<script>
+import { MangerStory } from '/src/stores/MangerStory.js' // 引入 Pinia store
+export default {
+  setup() {
+    const store = MangerStory()
+    return {
+      store
+    }
+  },
+  mounted() {
+    fetch(`${import.meta.env.BASE_URL}public/manger.json`)
+      .then((res) => res.json())
+      .then((json) => {
+        this.mem = json
+      })
+  },
+  methods: {
+    async memsignout() {
+      try {
+        const store = MangerStory() // 獲取 Pinia store
+
+        store.clearCurrentUser() // 設置當前用戶到 Pinia
+        alert('已登出')
+        this.$router.push('/')
+      } catch (error) {
+        console.error('發生錯誤:', error)
+        alert('發生錯誤')
+      }
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 hr {
