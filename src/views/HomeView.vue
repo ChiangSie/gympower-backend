@@ -86,6 +86,14 @@ hr {
   main {
     width: calc(83% - 10px);
     border: 1px black solid;
+    .loginaccount {
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-self: center;
+    }
   }
 }
 </style>
