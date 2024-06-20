@@ -33,7 +33,7 @@ export default {
         const store = MangerStory()
 
         // fetch 資料
-        const response = await fetch(`${import.meta.env.BASE_URL}manger.json`)
+        const response = await fetch(`${import.meta.env.BASE_URL}public/manger.json`)
         const users = await response.json()
 
         // 查找用戶

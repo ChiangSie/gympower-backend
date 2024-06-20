@@ -11,7 +11,7 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
     return {
       base: '/cid101/g5/back/',
       build: {
-        outDir: 'front'
+        outDir: 'back'
       },
       plugins: [vue(), VueDevTools()],
       resolve: {
