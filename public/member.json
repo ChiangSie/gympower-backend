@@ -1,0 +1,18 @@
+[
+  {
+    "mem_id": 1,
+    "mem_name": "test1",
+    "mem_phone": "123456789",
+    "mem_img": "",
+    "mem_email": "test1@gmail.com",
+    "mem_status": "1"
+  },
+  {
+    "mem_id": 2,
+    "mem_name": "test2",
+    "mem_phone": "123456789",
+    "mem_img": "",
+    "mem_email": "test2@gmail.com",
+    "mem_status": "0"
+  }
+]

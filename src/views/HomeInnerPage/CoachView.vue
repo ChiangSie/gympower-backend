@@ -1,11 +1,11 @@
 <template>
   <section>
     <h2>教練管理</h2>
-    <div class="memtop">
+    <div class="coachtop">
       <Input class="search-input" search enter-button placeholder="搜尋" style="width: 300px" />
     </div>
     <hr />
-    <Table size="large" :columns="columns" :data="memdata">
+    <Table size="large" :columns="columns" :data="coachdata">
       <template #coach_id="{ row }">
         <strong>{{ row.coach_id }}</strong>
       </template>
@@ -18,8 +18,14 @@
       <template #coach_licc="{ row }">
         <strong>{{ row.coach_licc }}</strong>
       </template>
-      <template #coach_rcm="{}">
-        <Switch true-color="#13ce66" false-color="#ff4949" :true-value="1" :false-value="0" />
+      <template #coach_rcm="{ row }">
+        <Switch
+          true-color="#13ce66"
+          false-color="#ff4949"
+          :true-value="1"
+          :false-value="0"
+          v-model="row.coach_rcm"
+        />
       </template>
       <template #coach_info="{ row }">
         <strong>{{ row.coach_info }}</strong>
@@ -69,25 +75,21 @@ export default {
           align: 'center'
         }
       ],
-      memdata: [
-        {
-          coach_id: '1',
-          coach_name: 'wakawaka',
-          coach_img: '',
-          coach_licc: '',
-          coach_rcm: '1',
-          coach_info: 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-        },
-        {
-          coach_id: '2',
-          coach_name: 'galagala',
-          coach_img: '',
-          coach_licc: '',
-          coach_rcm: '1',
-          coach_info: 'BBbbbbbbBBBBbbBBBbBBBBB'
-        }
-      ]
+      coachdata: []
     }
+  },
+  mounted() {
+    fetch(`${import.meta.env.BASE_URL}coach.json`)
+      .then((res) => res.json())
+      .then((json) => {
+        this.coachdata = json.map((item) => ({
+          ...item,
+          coach_rcm: parseInt(item.coach_rcm)
+        }))
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
   }
 }
 </script>

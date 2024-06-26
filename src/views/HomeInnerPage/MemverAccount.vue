@@ -21,8 +21,14 @@
       <template #mem_email="{ row }">
         <strong>{{ row.mem_email }}</strong>
       </template>
-      <template #mem_status="{}">
-        <Switch true-color="#13ce66" false-color="#ff4949" :true-value="1" :false-value="0" />
+      <template #mem_status="{ row }">
+        <Switch
+          true-color="#13ce66"
+          false-color="#ff4949"
+          :true-value="1"
+          :false-value="0"
+          v-model="row.mem_status"
+        />
       </template>
     </Table>
   </section>
@@ -68,25 +74,21 @@ export default {
           align: 'center'
         }
       ],
-      memdata: [
-        {
-          mem_id: 1,
-          mem_name: 'test1',
-          mem_phone: '123456789',
-          mem_img: '',
-          mem_email: 'test1@gmail.com',
-          mem_status: '1'
-        },
-        {
-          mem_id: 2,
-          mem_name: 'test2',
-          mem_phone: '123456789',
-          mem_img: '',
-          mem_email: 'test2@gmail.com',
-          mem_status: '1'
-        }
-      ]
+      memdata: []
     }
+  },
+  mounted() {
+    fetch(`${import.meta.env.BASE_URL}member.json`)
+      .then((res) => res.json())
+      .then((json) => {
+        this.memdata = json.map((item) => ({
+          ...item,
+          mem_status: parseInt(item.mem_status)
+        }))
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
   }
 }
 </script>
