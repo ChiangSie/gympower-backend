@@ -24,14 +24,14 @@
         </div>
       </Modal>
       <!-- 燈箱 -->
-      <Input
+      <!-- <Input
         class="search-input"
         search
         enter-button
         placeholder="搜尋"
         v-model="search"
         style="width: 300px"
-      />
+      /> -->
     </div>
     <hr />
     <Table size="large" :columns="columns" :data="mangerdata" id="table01">
@@ -44,8 +44,14 @@
       <template #am_psw="{ row }">
         <span>{{ row.am_psw }}</span>
       </template>
-      <template #am_status="{}">
-        <Switch true-color="#13ce66" false-color="#ff4949" :true-value="1" :false-value="0" />
+      <template #am_status="{ row }">
+        <Switch
+          true-color="#13ce66"
+          false-color="#ff4949"
+          :true-value="1"
+          :false-value="0"
+          v-model="row.am_status"
+        />
       </template>
     </Table>
   </section>
@@ -56,7 +62,9 @@ export default {
     return {
       //<燈箱
       modal2: false,
-      //<燈箱
+      //<搜尋
+      // search: '',
+      // searchedList: [],
       //<新增管理員
       addAdminData: {
         id: '',
@@ -64,10 +72,8 @@ export default {
         psw: '',
         status: 1
       },
-      //<新增管理員
       //<第一次輸入密碼
       firstpsw: '',
-      //<第一次輸入密碼
       columns: [
         {
           title: '編號',
@@ -99,25 +105,25 @@ export default {
           align: 'center'
         }
       ],
-      mangerdata: [
-        {
-          am_no: '1',
-          am_id: 'admin01',
-          am_acc: 'admin01',
-          am_psw: '123456',
-          am_status: '1'
-        },
-        {
-          am_no: '2',
-          am_id: 'admin02',
-          am_acc: 'admin02',
-          am_psw: '123456',
-          am_status: '1'
-        }
-      ]
+      mangerdata: []
     }
   },
-  methods: {}
+  mounted() {
+    fetch(`${import.meta.env.BASE_URL}admin.json`)
+      .then((res) => res.json())
+      .then((json) => {
+        this.mangerdata = json.map((item) => ({
+          ...item,
+          am_status: parseInt(item.am_status)
+        }))
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+  },
+  methods: {},
+  watch: {},
+  computed: {}
 }
 </script>
 
