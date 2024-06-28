@@ -22,6 +22,10 @@
             再次輸入密碼：<Input type="password" v-model="addAdminData.firstpsw" />
           </Space>
         </div>
+        <template #footer>
+          <Button @click="cancelAndClear">取消</Button>
+          <Button type="primary" @click="pswIdentify">送出</Button>
+        </template>
       </Modal>
       <!-- 燈箱 -->
       <!-- <Input
@@ -121,7 +125,20 @@ export default {
         console.error('Error fetching data:', error)
       })
   },
-  methods: {},
+  methods: {
+    cancelAndClear() {
+      this.addAdminData = {
+        id: '',
+        acc: '',
+        psw: '',
+        status: 1
+      }
+      // 清空 firstpsw
+      this.firstpsw = ''
+      // 關閉燈箱
+      this.modal2 = false
+    }
+  },
   watch: {},
   computed: {}
 }
