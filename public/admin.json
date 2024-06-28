@@ -1,28 +1,28 @@
 [
   {
     "am_no": "1",
-    "am_id": "admin01",
+    "am_id": "gymadmin01",
     "am_acc": "admin01",
     "am_psw": "zzzz",
-    "am_status": "0"
+    "am_status": "1"
   },
   {
     "am_no": "2",
-    "am_id": "admin02",
+    "am_id": "gymadmin02",
     "am_acc": "admin02",
     "am_psw": "yyyy",
-    "am_status": "0"
+    "am_status": "1"
   },
   {
     "am_no": "3",
-    "am_id": "admin03",
+    "am_id": "gymadmin03",
     "am_acc": "admin03",
     "am_psw": "xxxx",
     "am_status": "1"
   },
   {
     "am_no": "4",
-    "am_id": "admin04",
+    "am_id": "gymadmin04",
     "am_acc": "admin04",
     "am_psw": "wwww",
     "am_status": "1"

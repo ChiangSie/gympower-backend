@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const MangerStory = defineStore('admin', {
+export const AdminStore = defineStore('admin', {
   state: () => ({
     currentUser: null,
     currentAccount: null // 新增用來存儲當前用戶帳號的狀態

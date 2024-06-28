@@ -4,59 +4,68 @@
       <div class="loginpic">
         <img src="/src/assets/img/small logo.png" alt="" />
       </div>
-      <form action="#">
+      <form @submit.prevent="adminlogin()">
         <h2>管理員登入</h2>
-        <input type="text" name="manid" placeholder="管理ID" v-model="textData" />
-        <input type="password" name="manpsw" placeholder="Password" v-model="pswData" />
-        <button @click="manLogin()">登入</button>
+        <input type="text" name="manid" placeholder="管理員帳號" @blur="checkAcc()" v-model="acc" />
+        <input
+          type="password"
+          name="manpsw"
+          placeholder="Password"
+          @blur="checkPsw()"
+          v-model="psw"
+        />
+        <button type="submit">登入</button>
       </form>
     </div>
   </section>
 </template>
 
 <script>
-import { MangerStory } from '/src/stores/MangerStory.js' // 引入 Pinia store
+import { AdminStore } from '/src/stores/admin.js' // 引入 Pinia store
 
 export default {
   data() {
     return {
-      // 管理ID輸入框的值
-      textData: '',
-      // 密碼輸入框的值
-      pswData: ''
+      acc: '',
+      psw: '',
+      errorMsg: {
+        acc: '',
+        psw: ''
+      }
     }
   },
   methods: {
-    async manLogin() {
+    //確認帳號欄位密碼欄位有輸入值
+    checkAcc() {
+      if (this.acc === '') {
+        this.errorMsg.acc = '*請輸入帳號'
+      }
+    },
+    checkPsw() {
+      if (this.psw === '') {
+        this.errorMsg.psw = '*請輸入密碼'
+      }
+    },
+    async adminlogin() {
       try {
-        // 獲取 Pinia Store 的實例
-        const store = MangerStory()
+        const store = AdminStore() // 獲取 Pinia store 的實例
 
-        // fetch 資料
-        const response = await fetch(`${import.meta.env.BASE_URL}public/manger.json`)
+        const response = await fetch(`${import.meta.env.BASE_URL}admin.json`)
         const users = await response.json()
 
-        // 查找用戶
-        const loggedInUser = users.find(
-          (u) => u.account === this.textData && u.password === this.pswData
-        )
-
+        const loggedInUser = users.find((u) => u.am_acc === this.acc && u.am_psw === this.psw)
         if (loggedInUser) {
-          // 設置當前用戶到 Pinia
-          store.setCurrentUser(loggedInUser)
-          // 重置輸入框值
-          this.textData = ''
-          this.pswData = ''
-          // 跳轉到主頁
-          this.$router.push('/home')
+          store.setCurrentUser(loggedInUser) // 設置當前用戶到 Pinia
+          alert('登入成功!')
+          this.acc = ''
+          this.psw = ''
+          this.$router.push('/backstage')
         } else {
-          // 顯示錯誤訊息
-          // 重置輸入框值
-          this.textData = ''
-          this.pswData = ''
+          alert('帳號或密碼錯誤!')
+          this.acc = ''
+          this.psw = ''
         }
       } catch (error) {
-        // 顯示錯誤訊息
         console.error('登入失敗:', error)
         alert('登入失敗')
       }
