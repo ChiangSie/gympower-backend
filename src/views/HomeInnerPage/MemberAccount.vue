@@ -2,7 +2,13 @@
   <section>
     <h2>會員帳號管理</h2>
     <div class="memtop">
-      <Input class="search-input" search enter-button placeholder="搜尋" style="width: 300px" />
+      <Input
+        class="search-input"
+        search
+        enter-button
+        placeholder="搜尋"
+        style="width: 300px; height: 16px"
+      />
     </div>
     <hr />
     <Table size="large" :columns="columns" :data="memdata">
@@ -108,6 +114,10 @@ section {
   .memtop {
     display: flex;
     justify-content: end;
+    margin: 10px 0;
+    .search-input {
+      margin: 10px 0;
+    }
   }
 }
 </style>
