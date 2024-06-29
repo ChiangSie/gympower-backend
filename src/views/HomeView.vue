@@ -14,8 +14,8 @@
         <hr />
         <!-- <router-link to="/discount">優惠代碼管理</router-link>
         <hr /> -->
-        <router-link to="/popcoures">熱門課程管理</router-link>
-        <hr />
+        <!-- <router-link to="/popcoures">熱門課程管理</router-link>
+        <hr /> -->
         <router-link to="/course">課程資訊管理</router-link>
         <hr />
         <router-link to="/bento">餐盒訂單管理</router-link>
@@ -39,38 +39,7 @@
   </section>
 </template>
 
-<script>
-// import { MangerStory } from '/src/stores/MangerStory.js'
-// export default {
-//   setup() {
-//     const store = MangerStory()
-//     return {
-//       store
-//     }
-//   },
-//   mounted() {
-//     fetch(`${import.meta.env.BASE_URL}public/manger.json`)
-//       .then((res) => res.json())
-//       .then((json) => {
-//         this.mem = json
-//       })
-//   },
-//   methods: {
-//     async memsignout() {
-//       try {
-//         const store = MangerStory() // 獲取 Pinia store
-
-//         store.clearCurrentUser() // 設置當前用戶到 Pinia
-//         alert('已登出')
-//         this.$router.push('/')
-//       } catch (error) {
-//         console.error('發生錯誤:', error)
-//         alert('發生錯誤')
-//       }
-//     }
-//   }
-// }
-</script>
+<script></script>
 
 <style lang="scss" scoped>
 hr {
@@ -89,6 +58,7 @@ hr {
   aside {
     width: 17%;
     max-width: 300px;
+    height: 90vh;
     border: 1px black solid;
     text-align: center;
     .logo {
@@ -140,7 +110,7 @@ hr {
       }
     }
     .showplace {
-      border: 1px black solid;
+      // border: 1px black solid;
       width: 100%;
       height: 100%;
     }

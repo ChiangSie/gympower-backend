@@ -20,23 +20,25 @@ const router = createRouter({
         },
         {
           path: '/memberaccount',
-          component: () => import('../views/HomeInnerPage/MemverAccount.vue')
+          component: () => import('../views/HomeInnerPage/MemberAccount.vue')
         },
         {
           path: '/fitnessdiary',
           component: () => import('../views/HomeInnerPage/FitnessDiary.vue')
         },
         {
-          path: '/discount',
-          component: () => import('../views/HomeInnerPage/DiscountManager.vue')
-        },
-        {
-          path: '/popcoures',
-          component: () => import('../views/HomeInnerPage/PopCoures.vue')
-        },
-        {
           path: '/course',
-          component: () => import('../views/HomeInnerPage/CourseView.vue')
+          component: () => import('../views/HomeInnerPage/CourseView.vue'),
+          children: [
+            {
+              path: '/course_content',
+              component: () => import('../views/HomeInnerPage/CourseContent.vue')
+            },
+            {
+              path: '/course_order',
+              component: () => import('../views/HomeInnerPage/CourseOrder.vue')
+            }
+          ]
         },
         {
           path: '/bento',
@@ -49,10 +51,6 @@ const router = createRouter({
         {
           path: '/coach',
           component: () => import('../views/HomeInnerPage/CoachView.vue')
-        },
-        {
-          path: '/customserv',
-          component: () => import('../views/HomeInnerPage/CustomServ.vue')
         }
       ]
     }

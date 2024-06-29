@@ -145,11 +145,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.vertical-center-modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+// .vertical-center-modal {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
 hr {
   width: 100%;
   border-width: 1px;
@@ -163,6 +163,7 @@ hr {
     display: flex;
     flex-direction: column;
     align-items: end;
+    margin: 10px 0;
     button {
       margin: 10px 0;
     }
