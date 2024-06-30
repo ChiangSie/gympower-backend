@@ -3,7 +3,7 @@
     <h2>健身日記檢舉</h2>
     <div class="fdtop">
       <div class="fd_filter">
-        <button>全部</button>
+        <button @click="filter('')">全部</button>
         <button>未處理</button>
         <button>已下架</button>
       </div>
@@ -13,10 +13,11 @@
         enter-button
         placeholder="搜尋"
         style="width: 300px; height: 16px"
+        v-model="search"
       />
     </div>
     <hr />
-    <Table size="large" :columns="columns" :data="diarydata">
+    <Table size="small" :columns="columns" :data="searchedList">
       <template #r_time="{ row }">
         <strong>{{ row.r_time }}</strong>
       </template>
@@ -49,6 +50,9 @@
 export default {
   data() {
     return {
+      search: '',
+      searchedList: [],
+      DiaryData: [],
       columns: [
         {
           title: '檢舉日期',
@@ -88,6 +92,39 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    updateSearchedList() {
+      if (this.search.trim() === '') {
+        this.searchedList = this.DiaryData
+      } else {
+        this.searchedList = this.DiaryData.filter(
+          (diary) =>
+            diary.r_time.toString().includes(this.search) ||
+            diary.r_name.includes(this.search) ||
+            diary.r_type.includes(this.search) ||
+            diary.r_reason.includes(this.search) ||
+            diary.r_title.includes(this.search)
+        )
+      }
+    }
+  },
+  watch: {
+    search: 'updateSearchedList'
+  },
+  mounted() {
+    fetch(`${import.meta.env.BASE_URL}diary.json`)
+      .then((res) => res.json())
+      .then((json) => {
+        this.DiaryData = json.map((item) => ({
+          ...item,
+          r_status: parseInt(item.r_status)
+        }))
+        this.updateSearchedList()
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
   }
 }
 </script>
@@ -110,6 +147,7 @@ hr {
     flex-direction: row;
     justify-content: space-between;
     margin: 10px 0;
+    height: 60px;
     .fd_filter {
       margin: 20px 0 0 0;
       display: flex;
@@ -122,7 +160,7 @@ hr {
       }
     }
     .search-input {
-      margin: 10px 0;
+      margin: auto 0;
     }
   }
 }

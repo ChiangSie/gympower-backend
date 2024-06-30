@@ -7,11 +7,12 @@
         search
         enter-button
         placeholder="搜尋"
+        v-model="search"
         style="width: 300px; height: 16px"
       />
     </div>
     <hr />
-    <Table size="large" :columns="columns" :data="memdata">
+    <Table size="small" :columns="columns" :data="searchedList">
       <template #mem_id="{ row }">
         <strong>{{ row.mem_id }}</strong>
       </template>
@@ -43,6 +44,9 @@
 export default {
   data() {
     return {
+      search: '',
+      searchedList: [],
+      memdata: [],
       columns: [
         {
           title: '會員編號',
@@ -79,9 +83,26 @@ export default {
           slot: 'mem_status',
           align: 'center'
         }
-      ],
-      memdata: []
+      ]
     }
+  },
+  methods: {
+    updateSearchedList() {
+      if (this.search.trim() === '') {
+        this.searchedList = this.memdata
+      } else {
+        this.searchedList = this.memdata.filter(
+          (member) =>
+            member.mem_id.toString().includes(this.search) ||
+            member.mem_name.includes(this.search) ||
+            member.mem_phone.includes(this.search) ||
+            member.mem_email.includes(this.search)
+        )
+      }
+    }
+  },
+  watch: {
+    search: 'updateSearchedList'
   },
   mounted() {
     fetch(`${import.meta.env.BASE_URL}member.json`)
@@ -91,6 +112,7 @@ export default {
           ...item,
           mem_status: parseInt(item.mem_status)
         }))
+        this.updateSearchedList()
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -115,8 +137,9 @@ section {
     display: flex;
     justify-content: end;
     margin: 10px 0;
+    height: 60px;
     .search-input {
-      margin: 10px 0;
+      margin: auto 0;
     }
   }
 }
