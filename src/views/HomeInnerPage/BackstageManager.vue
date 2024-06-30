@@ -38,7 +38,7 @@
       /> -->
     </div>
     <hr />
-    <Table size="large" :columns="columns" :data="mangerdata" id="table01">
+    <Table size="small" :columns="columns" :data="mangerdata" id="table01">
       <template #am_id="{ row }">
         <strong>{{ row.am_id }}</strong>
       </template>
@@ -145,11 +145,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .vertical-center-modal {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// }
+.vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 hr {
   width: 100%;
   border-width: 1px;
@@ -160,12 +160,13 @@ hr {
   width: 100%;
   padding: 20px;
   .bsmtop {
+    height: 60px;
     display: flex;
     flex-direction: column;
     align-items: end;
     margin: 10px 0;
     button {
-      margin: 10px 0;
+      margin: auto 0;
     }
   }
   h2 {

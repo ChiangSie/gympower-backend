@@ -40,7 +40,7 @@
       <!-- 燈箱 -->
     </div>
     <hr />
-    <Table size="large" :columns="columns" :data="coachdata">
+    <Table size="small" :columns="columns" :data="coachdata">
       <template #coach_id="{ row }">
         <strong>{{ row.coach_id }}</strong>
       </template>

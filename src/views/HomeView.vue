@@ -16,7 +16,7 @@
         <hr /> -->
         <!-- <router-link to="/popcoures">熱門課程管理</router-link>
         <hr /> -->
-        <router-link to="/course">課程資訊管理</router-link>
+        <router-link to="/course_content">課程資訊管理</router-link>
         <hr />
         <router-link to="/bento">餐盒訂單管理</router-link>
         <hr />

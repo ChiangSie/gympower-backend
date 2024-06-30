@@ -3,8 +3,8 @@
     <h2>課程資訊管理</h2>
     <div class="cstop">
       <div class="corse_filter">
-        <router-link to="/course_content">課程內容</router-link>
-        <router-link to="/course_order">課程訂單</router-link>
+        <button><router-link to="/course_content">課程內容</router-link></button>
+        <button><router-link to="/course_order">課程訂單</router-link></button>
       </div>
       <div class="course_func">
         <button @click="modal2 = true" style="width: 120px; height: 30px">
@@ -52,7 +52,7 @@
           </div>
           <div>
             <h4>星期</h4>
-            <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
+            <CheckboxGroup v-model="checkGroup">
               <Checkbox label="一"></Checkbox>
               <Checkbox label="二"></Checkbox>
               <Checkbox label="三"></Checkbox>
@@ -75,15 +75,15 @@
           </div>
           <template #footer>
             <Button @click="cancelAndClear">取消</Button>
-            <Button type="primary" @click="pswIdentify">送出</Button>
+            <Button type="primary">送出</Button>
           </template>
         </Modal>
       </div>
     </div>
     <hr />
-    <main>
-      <routerview />
-    </main>
+    <div class="showplace">
+      <router-view />
+    </div>
   </section>
 </template>
 
@@ -92,7 +92,8 @@ export default {
   data() {
     return {
       modal2: false,
-      courseData: []
+      courseData: [],
+      checkGroup: []
     }
   },
   methods: {
@@ -124,20 +125,32 @@ hr {
     justify-content: space-between;
     align-items: center;
     margin: 10px 0;
+    height: 60px;
     .corse_filter {
       margin: 20px 0 0 0;
-      a {
-        display: inline-block;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: end;
+      button {
         margin: 0 10px;
-        font-size: 14px;
-        color: black;
+        padding: 0 10px;
+        a {
+          font-size: 14px;
+          line-height: 21px;
+          color: black;
+        }
       }
     }
     .course_func {
       display: flex;
       flex-direction: row;
-      gap: 10px;
+      gap: 15px;
     }
+  }
+  .showplace {
+    width: 100%;
+    height: auto;
   }
 }
 </style>
