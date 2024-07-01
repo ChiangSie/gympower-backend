@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import apiInstance from '@/plugin/api'
 import { AdminStore } from '/src/stores/admin.js' // 引入 Pinia store
 
 export default {
@@ -35,33 +36,38 @@ export default {
     }
   },
   methods: {
-    //確認帳號欄位密碼欄位有輸入值
+    // 確認帳號欄位密碼欄位有輸入值
     checkAcc() {
       if (this.acc === '') {
         this.errorMsg.acc = '*請輸入帳號'
+      } else {
+        this.errorMsg.acc = ''
       }
     },
     checkPsw() {
       if (this.psw === '') {
         this.errorMsg.psw = '*請輸入密碼'
+      } else {
+        this.errorMsg.psw = ''
       }
     },
     async adminlogin() {
       try {
-        const store = AdminStore() // 獲取 Pinia store 的實例
-
-        const response = await fetch(`${import.meta.env.BASE_URL}admin.json`)
-        const users = await response.json()
-
-        const loggedInUser = users.find((u) => u.am_acc === this.acc && u.am_psw === this.psw)
-        if (loggedInUser) {
-          store.setCurrentUser(loggedInUser) // 設置當前用戶到 Pinia
+        const response = await apiInstance.post('http://localhost/api/admin.php', {
+          u_account: this.acc,
+          u_psw: this.psw
+        })
+        if (response.data.code === 1) {
+          // 登入成功
+          const store = AdminStore()
+          store.setCurrentUser(response.data.adminInfo)
           alert('登入成功!')
           this.acc = ''
           this.psw = ''
           this.$router.push('/backstage')
         } else {
-          alert('帳號或密碼錯誤!')
+          // 登入失敗
+          alert(response.data.msg || '帳號或密碼錯誤!')
           this.acc = ''
           this.psw = ''
         }

@@ -4,8 +4,9 @@
     <div class="fdtop">
       <div class="fd_filter">
         <button @click="filter('')">全部</button>
-        <button>未處理</button>
-        <button>已下架</button>
+        <button @click="filter('已下架')">已下架</button>
+        <button @click="filter('未處理')">未處理</button>
+        <button @click="filter('已處理')">已處理</button>
       </div>
       <Input
         class="search-input"
@@ -41,6 +42,16 @@
           :false-value="0"
           v-model="row.r_status"
         />
+      </template>
+      <template #r_finish="{ row }">
+        <Switch size="large" v-model="row.r_finish">
+          <template #open>
+            <span>已處理</span>
+          </template>
+          <template #close>
+            <span>未處理</span>
+          </template>
+        </Switch>
       </template>
     </Table>
   </section>
@@ -88,6 +99,12 @@ export default {
           title: '狀態',
           key: 'r_status',
           slot: 'r_status',
+          align: 'center'
+        },
+        {
+          title: '處理',
+          key: 'r_finish',
+          slot: 'r_r_finish',
           align: 'center'
         }
       ]
