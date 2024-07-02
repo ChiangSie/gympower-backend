@@ -110,6 +110,20 @@ export default {
       ]
     }
   },
+  mounted() {
+    // fetch(`${import.meta.env.BASE_URL}diary.json`)
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     this.DiaryData = json.map((item) => ({
+    //       ...item,
+    //       r_status: parseInt(item.r_status)
+    //     }))
+    //     this.updateSearchedList()
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching data:', error)
+    //   })
+  },
   methods: {
     updateSearchedList() {
       if (this.search.trim() === '') {
@@ -128,20 +142,6 @@ export default {
   },
   watch: {
     search: 'updateSearchedList'
-  },
-  mounted() {
-    fetch(`${import.meta.env.BASE_URL}diary.json`)
-      .then((res) => res.json())
-      .then((json) => {
-        this.DiaryData = json.map((item) => ({
-          ...item,
-          r_status: parseInt(item.r_status)
-        }))
-        this.updateSearchedList()
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
   }
 }
 </script>

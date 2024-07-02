@@ -14,7 +14,7 @@
       >
         <div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
           <Space class="addInput" style="position: relative; left: 0px">
-            教練名稱：<Input v-model="addcoachData.caochname" />
+            教練名稱：<Input v-model="addcoachData.coachname" />
           </Space>
           <Space class="addInput" style="position: relative; left: 14.5px">
             內容：<Input v-model="addcoachData.coachinfo1" />
@@ -40,7 +40,7 @@
       <!-- 燈箱 -->
     </div>
     <hr />
-    <Table size="small" :columns="columns" :data="coachdata">
+    <Table size="small" :columns="columns" :data="coachData">
       <template #coach_id="{ row }">
         <strong>{{ row.coach_id }}</strong>
       </template>
@@ -78,13 +78,15 @@ export default {
         {
           title: '教練編號',
           key: 'coach_id',
-          align: 'center'
+          align: 'center',
+          width: 90
         },
         {
           title: '教練姓名',
           key: 'coach_name',
           slot: 'coach_name',
-          align: 'center'
+          align: 'center',
+          width: 90
         },
         {
           title: '教練照片',
@@ -108,10 +110,11 @@ export default {
           title: '教練簡介',
           key: 'coach_info',
           slot: 'coach_info',
-          align: 'center'
+          align: 'center',
+          width: 300
         }
       ],
-      coachdata: [],
+      coachData: [],
       addcoachData: {
         coachname: '',
         coachinfo1: '',
@@ -120,19 +123,48 @@ export default {
     }
   },
   mounted() {
-    fetch(`${import.meta.env.BASE_URL}coach.json`)
-      .then((res) => res.json())
-      .then((json) => {
-        this.coachdata = json.map((item) => ({
-          ...item,
-          coach_rcm: parseInt(item.coach_rcm)
-        }))
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
+    this.fetchData()
+    // fetch(`${import.meta.env.BASE_URL}coach.json`)
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     this.coachdata = json.map((item) => ({
+    //       ...item,
+    //       coach_rcm: parseInt(item.coach_rcm)
+    //     }))
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching data:', error)
+    //   })
   },
   methods: {
+    fetchData() {
+      fetch('http://localhost/api/get_coach.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then((json) => {
+          if (json.code === 200) {
+            this.coachData = json.data.list.map((item) => ({
+              ...item,
+              coach_rcm: parseInt(item.coach_rcm)
+            }))
+          } else {
+            console.error('API返回錯誤:', json.msg)
+          }
+        })
+        .catch((error) => {
+          console.error('獲取數據時出錯:', error)
+        })
+    },
     cancelAndClear() {
       this.addcoachData = {
         coachname: '',
