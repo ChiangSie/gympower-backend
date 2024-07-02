@@ -1,5 +1,5 @@
 <template>
-  <Table size="small" :columns="columns" :data="CourseData"></Table>
+  <Table size="medium" :columns="columns" :data="CourseData" border></Table>
 </template>
 
 <script>

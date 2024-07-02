@@ -18,40 +18,28 @@
       />
     </div>
     <hr />
-    <Table size="small" :columns="columns" :data="searchedList">
+    <Table size="medium" :columns="columns" :data="searchedList" border>
+      <template #r_memid="{ row }">
+        <strong>{{ row.r_memid }}</strong>
+      </template>
       <template #r_time="{ row }">
         <strong>{{ row.r_time }}</strong>
       </template>
-      <template #r_name="{ row }">
-        <strong>{{ row.r_name }}</strong>
-      </template>
       <template #r_type="{ row }">
-        <strong>{{ row.r_type }}</strong>
+        <strong>{{ getTypeLabel(row.r_type) }}</strong>
       </template>
       <template #r_reason="{ row }">
         <strong>{{ row.r_reason }}</strong>
       </template>
-      <template #r_title="{ row }">
-        <strong>{{ row.r_title }}</strong>
+      <template #r_content="{ row }">
+        <strong>{{ row.r_content }}</strong>
       </template>
       <template #r_status="{ row }">
-        <Switch
-          true-color="#13ce66"
-          false-color="#ff4949"
-          :true-value="1"
-          :false-value="0"
-          v-model="row.r_status"
-        />
-      </template>
-      <template #r_finish="{ row }">
-        <Switch size="large" v-model="row.r_finish">
-          <template #open>
-            <span>已處理</span>
-          </template>
-          <template #close>
-            <span>未處理</span>
-          </template>
-        </Switch>
+        <Select v-model="row.r_status" style="width: 100px">
+          <Option :value="1">已下架</Option>
+          <Option :value="2">未處理</Option>
+          <Option :value="3">已處理</Option>
+        </Select>
       </template>
     </Table>
   </section>
@@ -66,51 +54,53 @@ export default {
       DiaryData: [],
       columns: [
         {
+          title: '檢舉人ID',
+          key: 'r_memid',
+          slot: 'r_memid',
+          align: 'center',
+          fixed: 'left',
+          width: 150
+        },
+        {
           title: '檢舉日期',
           key: 'r_time',
           slot: 'r_time',
-          align: 'center'
-        },
-        {
-          title: '檢舉人',
-          key: 'r_name',
-          slot: 'r_name',
-          align: 'center'
+          align: 'center',
+          width: 150
         },
         {
           title: '檢舉類型',
           key: 'r_type',
           slot: 'r_type',
-          align: 'center'
+          align: 'center',
+          width: 150
         },
         {
           title: '檢舉原因',
           key: 'r_reason',
           slot: 'r_reason',
-          align: 'center'
+          align: 'center',
+          width: 150
         },
         {
-          title: '文章標題',
-          key: 'r_title',
-          slot: 'r_title',
-          align: 'center'
+          title: '文章內容',
+          key: 'r_Ccontent',
+          slot: 'r_content',
+          align: 'center',
+          width: 500
         },
         {
           title: '狀態',
           key: 'r_status',
           slot: 'r_status',
-          align: 'center'
-        },
-        {
-          title: '處理',
-          key: 'r_finish',
-          slot: 'r_r_finish',
-          align: 'center'
+          align: 'center',
+          width: 200
         }
       ]
     }
   },
   mounted() {
+    this.fetchData()
     // fetch(`${import.meta.env.BASE_URL}diary.json`)
     //   .then((res) => res.json())
     //   .then((json) => {
@@ -118,13 +108,43 @@ export default {
     //       ...item,
     //       r_status: parseInt(item.r_status)
     //     }))
-    //     this.updateSearchedList()
+    //     this.updateSearchedList() // Call updateSearchedList here
     //   })
     //   .catch((error) => {
     //     console.error('Error fetching data:', error)
     //   })
   },
   methods: {
+    fetchData() {
+      fetch('http://localhost/api/get_report.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then((json) => {
+          if (json.code === 200) {
+            this.DiaryData = json.data.list.map((item) => ({
+              ...item,
+              r_type: parseInt(item.r_type),
+              r_status: parseInt(item.r_status)
+            }))
+            this.updateSearchedList()
+          } else {
+            console.error('API返回錯誤:', json.msg)
+          }
+        })
+        .catch((error) => {
+          console.error('獲取數據時出錯:', error)
+        })
+    },
     updateSearchedList() {
       if (this.search.trim() === '') {
         this.searchedList = this.DiaryData
@@ -137,6 +157,22 @@ export default {
             diary.r_reason.includes(this.search) ||
             diary.r_title.includes(this.search)
         )
+      }
+    }
+  },
+  computed: {
+    getTypeLabel() {
+      return (type) => {
+        switch (type) {
+          case 1:
+            return '虛假/不實消息'
+          case 2:
+            return '未成年不宜'
+          case 3:
+            return '廣告內容'
+          default:
+            return ''
+        }
       }
     }
   },
