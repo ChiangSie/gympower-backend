@@ -19,7 +19,7 @@
         />
         <Modal title="課程內容管理" v-model="modal2" :mask-closable="false" style="top: 30px">
           <div>
-            <h4>課程內容</h4>
+            <h4>課程名稱</h4>
             <input type="text" />
           </div>
           <div>

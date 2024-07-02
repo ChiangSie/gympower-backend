@@ -46,7 +46,7 @@ export default {
     return {
       search: '',
       searchedList: [],
-      memdata: [],
+      memberData: [],
       columns: [
         {
           title: '會員編號',
@@ -86,12 +86,56 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.fetchData()
+    // fetch(`${import.meta.env.BASE_URL}member.json`)
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     this.memdata = json.map((item) => ({
+    //       ...item,
+    //       mem_status: parseInt(item.mem_status)
+    //     }))
+    //     this.updateSearchedList()
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching data:', error)
+    //   })
+  },
   methods: {
+    fetchData() {
+      fetch('http://localhost/api/get_member.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then((json) => {
+          if (json.code === 200) {
+            this.memberData = json.data.list.map((item) => ({
+              ...item,
+              mem_status: parseInt(item.mem_status)
+            }))
+            this.updateSearchedList() // <--- Add this line
+          } else {
+            console.error('API返回錯誤:', json.msg)
+          }
+        })
+        .catch((error) => {
+          console.error('獲取數據時出錯:', error)
+        })
+    },
     updateSearchedList() {
       if (this.search.trim() === '') {
-        this.searchedList = this.memdata
+        this.searchedList = this.memberData
       } else {
-        this.searchedList = this.memdata.filter(
+        this.searchedList = this.memberData.filter(
           (member) =>
             member.mem_id.toString().includes(this.search) ||
             member.mem_name.includes(this.search) ||
@@ -103,20 +147,6 @@ export default {
   },
   watch: {
     search: 'updateSearchedList'
-  },
-  mounted() {
-    fetch(`${import.meta.env.BASE_URL}member.json`)
-      .then((res) => res.json())
-      .then((json) => {
-        this.memdata = json.map((item) => ({
-          ...item,
-          mem_status: parseInt(item.mem_status)
-        }))
-        this.updateSearchedList()
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
   }
 }
 </script>

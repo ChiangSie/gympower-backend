@@ -13,11 +13,13 @@
         class-name="vertical-center-modal "
       >
         <div style="display: flex; flex-direction: column; align-items: center; gap: 3px">
-          <Space class="addInput" style="position: relative; left: 7.5px">
-            新增ID：<Input v-model="addAdminData.id" />
+          <Space class="addInput" style="position: relative; left: -6px">
+            新增管理ID：<Input v-model="addAdminData.id" />
           </Space>
           <Space class="addInput"> 新增帳號：<Input v-model="addAdminData.acc" /> </Space>
-          <Space class="addInput"> 新增密碼：<Input v-model="addAdminData.psw" /> </Space>
+          <Space class="addInput">
+            新增密碼：<Input type="password" v-model="addAdminData.psw" />
+          </Space>
           <Space style="position: relative; right: 14px">
             再次輸入密碼：<Input type="password" v-model="addAdminData.firstpsw" />
           </Space>
@@ -113,19 +115,37 @@ export default {
     }
   },
   mounted() {
-    fetch(`${import.meta.env.BASE_URL}admin.json`)
-      .then((res) => res.json())
-      .then((json) => {
-        this.mangerdata = json.map((item) => ({
-          ...item,
-          am_status: parseInt(item.am_status)
-        }))
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
+    this.fetchData()
   },
   methods: {
+    fetchData() {
+      fetch('http://localhost/api/get_admin.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then((json) => {
+          if (json.code === 200) {
+            this.mangerdata = json.data.list.map((item) => ({
+              ...item,
+              am_status: parseInt(item.am_status) // 確保 am_status 是數字
+            }))
+          } else {
+            console.error('API返回錯誤:', json.msg)
+          }
+        })
+        .catch((error) => {
+          console.error('獲取數據時出錯:', error)
+        })
+    },
     cancelAndClear() {
       this.addAdminData = {
         id: '',
@@ -137,6 +157,14 @@ export default {
       this.firstpsw = ''
       // 關閉燈箱
       this.modal2 = false
+    },
+    pswIdentify() {
+      if (this.addAdminData.psw !== this.firstpsw) {
+        this.$Message.error('密碼與再次輸入密碼不相符')
+      } else {
+        // 進行提交操作
+        this.submitAdminData()
+      }
     }
   },
   watch: {},
