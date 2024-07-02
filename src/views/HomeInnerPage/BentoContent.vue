@@ -13,7 +13,7 @@
       </div>
     </div>
     <hr />
-    <Table size="small" :columns="columns" :data="BoData"></Table>
+    <Table size="medium" :columns="columns" :data="BoData" border></Table>
   </section>
 </template>
 <script>

@@ -40,7 +40,7 @@
       <!-- 燈箱 -->
     </div>
     <hr />
-    <Table size="small" :columns="columns" :data="coachData">
+    <Table size="medium" :columns="columns" :data="coachData" border>
       <template #coach_id="{ row }">
         <strong>{{ row.coach_id }}</strong>
       </template>
@@ -65,6 +65,19 @@
       <template #coach_info="{ row }">
         <strong>{{ row.coach_info }}</strong>
       </template>
+      <!-- 編輯按鈕 -->
+      <template #coach_operate="{ row }">
+        <div v-if="row.isEditing">
+          <button class="noneborder" @click="saveCoach(row)">
+            <i class="fa-regular fa-floppy-disk"></i>
+          </button>
+        </div>
+        <div v-else>
+          <button class="noneborder" @click="editCoach(row)">
+            <i class="fa-regular fa-pen-to-square"></i>
+          </button>
+        </div>
+      </template>
     </Table>
   </section>
 </template>
@@ -79,39 +92,50 @@ export default {
           title: '教練編號',
           key: 'coach_id',
           align: 'center',
-          width: 90
+          width: 150,
+          fixed: 'left'
         },
         {
           title: '教練姓名',
           key: 'coach_name',
           slot: 'coach_name',
           align: 'center',
-          width: 90
+          width: 150
         },
         {
           title: '教練照片',
           key: 'coach_img',
           slot: 'coach_img',
-          align: 'center'
+          align: 'center',
+          width: 150
         },
         {
           title: '專業證照',
           key: 'coach_licc',
           slot: 'coach_licc',
-          align: 'center'
+          align: 'center',
+          width: 200
         },
         {
           title: '推薦教練',
           key: 'coach_rcm',
           slot: 'coach_rcm',
-          align: 'center'
+          align: 'center',
+          width: 100
         },
         {
           title: '教練簡介',
           key: 'coach_info',
           slot: 'coach_info',
           align: 'center',
-          width: 300
+          width: 400
+        },
+        {
+          title: '編輯',
+          key: 'coach_operate',
+          slot: 'coach_operate',
+          align: 'center',
+          width: 100
         }
       ],
       coachData: [],
@@ -174,12 +198,26 @@ export default {
       }
       // 關閉燈箱
       this.modal2 = false
+    },
+    editCoach(row) {
+      // 設置教練資料為編輯模式
+      row.isEditing = true
+    },
+    saveCoach(row) {
+      // 將教練資料儲存到伺服器
+      //...
+      // 設置教練資料為非編輯模式
+      row.isEditing = false
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.noneborder {
+  background-color: transparent;
+  border: none;
+}
 hr {
   width: 100%;
   border-width: 1px;

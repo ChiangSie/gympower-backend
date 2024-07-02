@@ -16,7 +16,7 @@
       </div>
     </div>
     <hr />
-    <Table size="small" :columns="columns" :data="BentoData"></Table>
+    <Table size="medium" :columns="columns" :data="BentoData" border></Table>
   </section>
 </template>
 <script>

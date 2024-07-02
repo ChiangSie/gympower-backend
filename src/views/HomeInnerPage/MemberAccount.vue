@@ -12,7 +12,7 @@
       />
     </div>
     <hr />
-    <Table size="small" :columns="columns" :data="searchedList">
+    <Table size="medium" :columns="columns" :data="searchedList" border>
       <template #mem_id="{ row }">
         <strong>{{ row.mem_id }}</strong>
       </template>
@@ -51,37 +51,44 @@ export default {
         {
           title: '會員編號',
           key: 'mem_id',
-          align: 'center'
+          align: 'center',
+          fixed: 'left',
+          width: 150
         },
         {
           title: '會員姓名',
           key: 'mem_name',
           slot: 'mem_name',
-          align: 'center'
+          align: 'center',
+          width: 200
         },
         {
           title: '會員手機',
           key: 'mem_phone',
           slot: 'mem_phone',
-          align: 'center'
+          align: 'center',
+          width: 200
         },
         {
           title: '會員頭像',
           key: 'mem_img',
           slot: 'mem_img',
-          align: 'center'
+          align: 'center',
+          width: 200
         },
         {
           title: '電子信箱',
           key: 'mem_email',
           slot: 'mem_email',
-          align: 'center'
+          align: 'center',
+          width: 250
         },
         {
           title: '狀態',
           key: 'mem_status',
           slot: 'mem_status',
-          align: 'center'
+          align: 'center',
+          width: 100
         }
       ]
     }

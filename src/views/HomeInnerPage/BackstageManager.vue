@@ -40,7 +40,7 @@
       /> -->
     </div>
     <hr />
-    <Table size="small" :columns="columns" :data="mangerdata" id="table01">
+    <Table size="medium" :columns="columns" :data="mangerdata" id="table01" border>
       <template #am_id="{ row }">
         <strong>{{ row.am_id }}</strong>
       </template>
