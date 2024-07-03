@@ -59,6 +59,20 @@
           v-model="row.am_status"
         />
       </template>
+      <template #coach_operate="{ row }">
+        <div v-if="row.isEditing">
+          <!-- 儲存按鈕 -->
+          <button class="noneborder" @click="saveAdmin(row)">
+            <i class="fa-regular fa-floppy-disk"></i>
+          </button>
+        </div>
+        <div v-else>
+          <!-- 編輯按鈕 -->
+          <button class="noneborder" @click="editAdmin(row)">
+            <i class="fa-regular fa-pen-to-square"></i>
+          </button>
+        </div>
+      </template>
     </Table>
   </section>
 </template>
@@ -109,6 +123,13 @@ export default {
           key: 'am_status',
           slot: 'am_status',
           align: 'center'
+        },
+        {
+          title: '編輯',
+          key: 'coach_operate',
+          slot: 'coach_operate',
+          align: 'center',
+          width: 100
         }
       ],
       mangerdata: []
@@ -158,6 +179,53 @@ export default {
       // 關閉燈箱
       this.modal2 = false
     },
+    editAdmin(row) {
+      // Set the row to editing mode
+      row.isEditing = true
+      // Initialize the editCoachData with the current row's values
+      // this.editCoachData.img = row.coach_img
+      // this.editCoachData.licc = row.coach_licc
+      // this.editCoachData.info = row.coach_info
+      // this.editCoachData.status = row.coach_status
+    },
+    saveAdmin(row) {
+      // 準備要發送的數據
+      const updatedData = {
+        // coach_id: row.coach_id,
+        // coach_img: this.editCoachData.img,
+        // coach_licc: this.editCoachData.licc,
+        // coach_info: this.editCoachData.info,
+        // coach_rcm: row.coach_rcm
+      }
+
+      // 發送 POST 請求到 PHP 後端
+      fetch('http://localhost/api/update_admin.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.code === 200 || !data.error) {
+            // 檢查兩種可能的成功響應
+            // 更新成功，更新本地數據
+            // row.coach_img = this.editCoachData.img
+            // row.coach_licc = this.editCoachData.licc
+            // row.coach_info = this.editCoachData.info
+            row.isEditing = false
+            this.$Message.success(data.msg || '教練資料更新成功')
+          } else {
+            // 更新失敗，顯示錯誤信息
+            this.$Message.error(data.msg || '更新失敗')
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+          this.$Message.error('更新過程中發生錯誤')
+        })
+    },
     pswIdentify() {
       if (this.addAdminData.psw !== this.firstpsw) {
         this.$Message.error('密碼與再次輸入密碼不相符')
@@ -173,6 +241,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.noneborder {
+  background-color: transparent;
+  border: none;
+}
 .vertical-center-modal {
   display: flex;
   align-items: center;

@@ -51,14 +51,14 @@ hr {
 .backendpage {
   width: 100%;
   height: auto;
-  padding: 15px 50px;
+  padding: 0x;
   display: flex;
   flex-direction: row;
   gap: 10px;
   aside {
     width: 17%;
     max-width: 300px;
-    height: 90vh;
+    height: 100vh;
     border: 1px black solid;
     text-align: center;
     .logo {
@@ -98,7 +98,6 @@ hr {
     gap: 5px;
     display: flex;
     flex-direction: column;
-    // border: 1px black solid;
     .mangeridshow {
       display: flex;
       justify-content: flex-end;

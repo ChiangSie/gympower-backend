@@ -40,39 +40,65 @@
       <!-- 燈箱 -->
     </div>
     <hr />
+    <!-- 表格項目 -->
     <Table size="medium" :columns="columns" :data="coachData" border>
+      <!-- 教練ID -->
       <template #coach_id="{ row }">
         <strong>{{ row.coach_id }}</strong>
       </template>
+      <!-- 教練姓名 -->
       <template #coach_name="{ row }">
         <strong>{{ row.coach_name }}</strong>
       </template>
+      <!-- 教練照片 -->
       <template #coach_img="{ row }">
-        <strong>{{ row.coach_img }}</strong>
+        <div v-if="row.isEditing"><input v-on="editCoachData.img" type="file" /></div>
+        <div v-else>
+          <strong>{{ row.coach_img }}</strong>
+        </div>
       </template>
+      <!-- 教練證照 -->
       <template #coach_licc="{ row }">
-        <strong>{{ row.coach_licc }}</strong>
+        <div v-if="row.isEditing"><input v-model="editCoachData.licc" type="text" /></div>
+        <div v-else>
+          <strong>{{ row.coach_licc }}</strong>
+        </div>
       </template>
+      <!-- 推薦教練 -->
       <template #coach_rcm="{ row }">
         <Switch
           true-color="#13ce66"
           false-color="#ff4949"
+          :disabled="!row.isEditing"
           :true-value="1"
           :false-value="0"
           v-model="row.coach_rcm"
         />
       </template>
+      <!-- 教練介紹 -->
       <template #coach_info="{ row }">
-        <strong>{{ row.coach_info }}</strong>
+        <div v-if="row.isEditing">
+          <textarea
+            v-model="editCoachData.info"
+            cols="30"
+            rows="10"
+            style="width: 95%; aspect-ratio: 2/1; margin: 10px auto"
+          ></textarea>
+        </div>
+        <div v-else>
+          <strong>{{ row.coach_info }}</strong>
+        </div>
       </template>
       <!-- 編輯按鈕 -->
       <template #coach_operate="{ row }">
         <div v-if="row.isEditing">
+          <!-- 儲存按鈕 -->
           <button class="noneborder" @click="saveCoach(row)">
             <i class="fa-regular fa-floppy-disk"></i>
           </button>
         </div>
         <div v-else>
+          <!-- 編輯按鈕 -->
           <button class="noneborder" @click="editCoach(row)">
             <i class="fa-regular fa-pen-to-square"></i>
           </button>
@@ -87,12 +113,15 @@ export default {
   data() {
     return {
       modal2: false,
+      //編輯器開關
+      editIndex: -1,
+      // columns為表格項目
       columns: [
         {
           title: '教練編號',
           key: 'coach_id',
           align: 'center',
-          width: 150,
+          width: 120,
           fixed: 'left'
         },
         {
@@ -107,7 +136,7 @@ export default {
           key: 'coach_img',
           slot: 'coach_img',
           align: 'center',
-          width: 150
+          width: 250
         },
         {
           title: '專業證照',
@@ -138,11 +167,19 @@ export default {
           width: 100
         }
       ],
+      // coachData為php撈table資料的儲存處
       coachData: [],
+      // addcoachData為新增表格所需
       addcoachData: {
         coachname: '',
         coachinfo1: '',
         coachinfo2: ''
+      },
+      editCoachData: {
+        img: '',
+        licc: '',
+        status: '',
+        info: ''
       }
     }
   },
@@ -200,14 +237,51 @@ export default {
       this.modal2 = false
     },
     editCoach(row) {
-      // 設置教練資料為編輯模式
+      // Set the row to editing mode
       row.isEditing = true
+      // Initialize the editCoachData with the current row's values
+      this.editCoachData.img = row.coach_img
+      this.editCoachData.licc = row.coach_licc
+      this.editCoachData.info = row.coach_info
+      this.editCoachData.status = row.coach_status
     },
     saveCoach(row) {
-      // 將教練資料儲存到伺服器
-      //...
-      // 設置教練資料為非編輯模式
-      row.isEditing = false
+      // 準備要發送的數據
+      const updatedData = {
+        coach_id: row.coach_id,
+        coach_img: this.editCoachData.img,
+        coach_licc: this.editCoachData.licc,
+        coach_info: this.editCoachData.info,
+        coach_rcm: row.coach_rcm
+      }
+
+      // 發送 POST 請求到 PHP 後端
+      fetch('http://localhost/api/update_coach.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.code === 200 || !data.error) {
+            // 檢查兩種可能的成功響應
+            // 更新成功，更新本地數據
+            row.coach_img = this.editCoachData.img
+            row.coach_licc = this.editCoachData.licc
+            row.coach_info = this.editCoachData.info
+            row.isEditing = false
+            this.$Message.success(data.msg || '教練資料更新成功')
+          } else {
+            // 更新失敗，顯示錯誤信息
+            this.$Message.error(data.msg || '更新失敗')
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+          this.$Message.error('更新過程中發生錯誤')
+        })
     }
   }
 }
