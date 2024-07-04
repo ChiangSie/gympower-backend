@@ -266,8 +266,6 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           if (data.code === 200 || !data.error) {
-            // 檢查兩種可能的成功響應
-            // 更新成功，更新本地數據
             row.coach_img = this.editCoachData.img
             row.coach_licc = this.editCoachData.licc
             row.coach_info = this.editCoachData.info
