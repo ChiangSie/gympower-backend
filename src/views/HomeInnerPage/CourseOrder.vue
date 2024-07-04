@@ -1,6 +1,5 @@
 <template>
-  bbb
-  <Table size="medium" :columns="columns" :data="CourseData" border>
+  <Table size="medium" :columns="columns" :data="CourseOrderData" border>
     <template #o_id="{ row }">
       <strong>{{ row.o_id }}</strong>
     </template>
@@ -71,11 +70,42 @@ export default {
           align: 'center'
         }
       ],
-      CourseData: []
+      CourseOrderData: []
     }
   },
-  mounted() {},
-  metheds: {},
+  mounted() {
+    // this.fetchData()
+  },
+  metheds: {
+    fetchData() {
+      fetch('http://localhost/api/get_course_ord.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then((json) => {
+          if (json.code === 200) {
+            this.CourseOrderData = json.data.list.map((item) => ({
+              ...item,
+              o_status: parseInt(item.o_status)
+            }))
+          } else {
+            console.error('API返回錯誤:', json.msg)
+          }
+        })
+        .catch((error) => {
+          console.error('獲取數據時出錯:', error)
+        })
+    }
+  },
   watch: {}
 }
 </script>

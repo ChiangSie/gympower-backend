@@ -184,8 +184,39 @@ export default {
       row.isEditing = true
     },
     saveReport(row) {
-      // 實現保存邏輯
-      row.isEditing = false
+      row.isUpdating = false
+      const updatedData = {
+        r_id: row.r_id,
+        r_status: row.r_status
+      }
+
+      fetch('http://localhost/api/update_report.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.code === 200) {
+            row.isEditing = false
+            this.$Message.success('報告狀態更新成功')
+          } else {
+            this.$Message.error(data.msg || '更新失敗')
+            // 如果更新失敗，恢復原來的狀態
+            row.r_status = this.DiaryData.find((item) => item.r_id === row.r_id).r_status
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+          this.$Message.error('更新過程中發生錯誤')
+          // 如果發生錯誤，恢復原來的狀態
+          row.r_status = this.DiaryData.find((item) => item.r_id === row.r_id).r_status
+        })
+        .finally(() => {
+          row.isUpdating = false
+        })
     }
   },
   computed: {
