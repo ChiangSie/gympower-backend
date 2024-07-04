@@ -41,7 +41,7 @@
     </div>
     <hr />
     <!-- 表格項目 -->
-    <Table size="medium" :columns="columns" :data="coachData" border>
+    <Table size="medium" height="500" :columns="columns" :data="coachData" border>
       <!-- 教練ID -->
       <template #coach_id="{ row }">
         <strong>{{ row.coach_id }}</strong>
