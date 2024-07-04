@@ -3,10 +3,12 @@
     <h2>餐點管理</h2>
     <div class="botop">
       <div class="bento_filter">
+        <button>全部</button>
         <button>主食</button>
-        <button>副餐</button>
-        <button>蔬菜</button>
-        <button>配料</button>
+        <button>肉類</button>
+        <button>蔬菜類</button>
+        <button>海鮮類</button>
+        <button>蛋豆類</button>
       </div>
       <div class="bento_func">
         <Input class="search-input" search enter-button placeholder="搜尋" style="width: 300px" />
