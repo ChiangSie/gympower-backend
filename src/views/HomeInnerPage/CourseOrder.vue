@@ -1,4 +1,5 @@
 <template>
+  bbb
   <Table size="medium" :columns="columns" :data="CourseData" border></Table>
 </template>
 

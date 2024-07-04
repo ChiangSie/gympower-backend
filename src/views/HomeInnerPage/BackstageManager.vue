@@ -54,6 +54,7 @@
         <Switch
           true-color="#13ce66"
           false-color="#ff4949"
+          :disabled="!row.isEditing"
           :true-value="1"
           :false-value="0"
           v-model="row.am_status"
@@ -94,6 +95,10 @@ export default {
       },
       //<第一次輸入密碼
       firstpsw: '',
+      editAdminData: {
+        status: ''
+      },
+      mangerdata: [],
       columns: [
         {
           title: '編號',
@@ -131,8 +136,7 @@ export default {
           align: 'center',
           width: 100
         }
-      ],
-      mangerdata: []
+      ]
     }
   },
   mounted() {
@@ -183,19 +187,13 @@ export default {
       // Set the row to editing mode
       row.isEditing = true
       // Initialize the editCoachData with the current row's values
-      // this.editCoachData.img = row.coach_img
-      // this.editCoachData.licc = row.coach_licc
-      // this.editCoachData.info = row.coach_info
-      // this.editCoachData.status = row.coach_status
+      this.editAdminData.status = row.am_status
     },
     saveAdmin(row) {
       // 準備要發送的數據
       const updatedData = {
-        // coach_id: row.coach_id,
-        // coach_img: this.editCoachData.img,
-        // coach_licc: this.editCoachData.licc,
-        // coach_info: this.editCoachData.info,
-        // coach_rcm: row.coach_rcm
+        am_no: row.am_no,
+        am_status: row.am_status
       }
 
       // 發送 POST 請求到 PHP 後端
@@ -211,9 +209,7 @@ export default {
           if (data.code === 200 || !data.error) {
             // 檢查兩種可能的成功響應
             // 更新成功，更新本地數據
-            // row.coach_img = this.editCoachData.img
-            // row.coach_licc = this.editCoachData.licc
-            // row.coach_info = this.editCoachData.info
+
             row.isEditing = false
             this.$Message.success(data.msg || '教練資料更新成功')
           } else {
