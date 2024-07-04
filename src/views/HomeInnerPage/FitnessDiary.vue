@@ -35,11 +35,25 @@
         <strong>{{ row.r_content }}</strong>
       </template>
       <template #r_status="{ row }">
-        <Select v-model="row.r_status" style="width: 100px">
+        <Select v-model="row.r_status" style="width: 100px" :disabled="!row.isEditing">
           <Option :value="1">已下架</Option>
           <Option :value="2">未處理</Option>
           <Option :value="3">已處理</Option>
         </Select>
+      </template>
+      <template #r_operate="{ row }">
+        <div v-if="row.isEditing">
+          <!-- 儲存按鈕 -->
+          <button class="noneborder" @click="saveReport(row)">
+            <i class="fa-regular fa-floppy-disk"></i>
+          </button>
+        </div>
+        <div v-else>
+          <!-- 編輯按鈕 -->
+          <button class="noneborder" @click="editReport(row)">
+            <i class="fa-regular fa-pen-to-square"></i>
+          </button>
+        </div>
       </template>
     </Table>
   </section>
@@ -95,6 +109,13 @@ export default {
           slot: 'r_status',
           align: 'center',
           width: 200
+        },
+        {
+          title: '編輯',
+          key: 'r_operate',
+          slot: 'r_operate',
+          align: 'center',
+          width: 100
         }
       ]
     }
@@ -158,6 +179,13 @@ export default {
             diary.r_title.includes(this.search)
         )
       }
+    },
+    editReport(row) {
+      row.isEditing = true
+    },
+    saveReport(row) {
+      // 實現保存邏輯
+      row.isEditing = false
     }
   },
   computed: {
@@ -183,6 +211,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.noneborder {
+  background-color: transparent;
+  border: none;
+}
 hr {
   width: 100%;
   border-width: 1px;

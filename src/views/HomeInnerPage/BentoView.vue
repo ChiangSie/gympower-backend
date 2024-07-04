@@ -16,7 +16,7 @@
       </div>
     </div>
     <hr />
-    <Table size="medium" :columns="columns" :data="BentoData" border></Table>
+    <Table size="medium" :columns="columns" :data="BentoListData" border></Table>
   </section>
 </template>
 <script>
@@ -70,9 +70,43 @@ export default {
           align: 'center'
         }
       ],
-      BentoData: []
+      BentoListData: []
     }
-  }
+  },
+  mounted() {
+    // this.fetchData()
+  },
+  metheds: {
+    fetchData() {
+      fetch('http://localhost/api/get_bentolist.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then((json) => {
+          if (json.code === 200) {
+            this.BentoListData = json.data.list.map((item) => ({
+              ...item,
+              bento_status: parseInt(item.bento_status)
+            }))
+          } else {
+            console.error('API返回錯誤:', json.msg)
+          }
+        })
+        .catch((error) => {
+          console.error('獲取數據時出錯:', error)
+        })
+    }
+  },
+  watch: {}
 }
 </script>
 
