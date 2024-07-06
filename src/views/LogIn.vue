@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import apiInstance from '@/plugin/api'
+// import apiInstance from '@/plugin/api'
 import { useAdminStore } from '/src/stores/admin.js'
 
 export default {
@@ -52,22 +52,29 @@ export default {
     },
     async adminlogin() {
       try {
-        const response = await apiInstance.post('http://localhost/api/admin.php', {
-          u_account: this.acc,
-          u_psw: this.psw
+        const response = await fetch('http://localhost/api/admin.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            u_account: this.acc,
+            u_psw: this.psw
+          })
         })
-        if (response.data.code === 1) {
+        const data = await response.json()
+        if (data.code === 1) {
           const adminStore = useAdminStore()
           adminStore.setCurrentUser({
-            id: response.data.adminInfo.am_id,
-            acc: response.data.adminInfo.am_acc
+            id: data.adminInfo.am_id,
+            acc: data.adminInfo.am_acc
           })
           alert('登入成功!')
           this.acc = ''
           this.psw = ''
           this.$router.push('/backstage')
         } else {
-          alert(response.data.msg || '帳號或密碼錯誤!')
+          alert(data.msg || '帳號或密碼錯誤!')
           this.acc = ''
           this.psw = ''
         }
