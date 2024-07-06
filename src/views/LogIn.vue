@@ -22,7 +22,7 @@
 
 <script>
 import apiInstance from '@/plugin/api'
-import { AdminStore } from '/src/stores/admin.js' // 引入 Pinia store
+import { useAdminStore } from '/src/stores/admin.js' // 引入 Pinia store
 
 export default {
   data() {
@@ -59,8 +59,11 @@ export default {
         })
         if (response.data.code === 1) {
           // 登入成功
-          const store = AdminStore()
-          store.setCurrentUser(response.data.adminInfo)
+          const adminStore = useAdminStore()
+          adminStore.setCurrentUser({
+            username: response.data.adminInfo.username // 假設 API 返回的數據中包含 username
+            // 可以根據需要添加其他用戶信息
+          })
           alert('登入成功!')
           this.acc = ''
           this.psw = ''

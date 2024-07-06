@@ -27,18 +27,12 @@ const router = createRouter({
           component: () => import('../views/HomeInnerPage/FitnessDiary.vue')
         },
         {
-          path: '/course',
-          component: () => import('../views/HomeInnerPage/CourseView.vue'),
-          children: [
-            {
-              path: '/course_content',
-              component: () => import('../views/HomeInnerPage/CourseContent.vue')
-            },
-            {
-              path: '/course_order',
-              component: () => import('../views/HomeInnerPage/CourseOrder.vue')
-            }
-          ]
+          path: '/course_content',
+          component: () => import('../views/HomeInnerPage/CourseConView.vue')
+        },
+        {
+          path: '/course_order',
+          component: () => import('../views/HomeInnerPage/CourseOrdView.vue')
         },
         {
           path: '/bento',

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const AdminStore = defineStore('admin', {
+export const useAdminStore = defineStore('admin', {
   state: () => ({
     currentUser: null,
     currentAccount: null // 新增用來存儲當前用戶帳號的狀態
@@ -9,7 +9,7 @@ export const AdminStore = defineStore('admin', {
     setCurrentUser(user) {
       this.currentUser = user
       if (user) {
-        this.currentAccount = user.account // 提取並儲存用戶帳號
+        this.currentAccount = user.am_acc // 提取並儲存用戶帳號
         localStorage.setItem('currentUser', JSON.stringify(user))
       } else {
         this.currentAccount = null // 清空帳號資料
