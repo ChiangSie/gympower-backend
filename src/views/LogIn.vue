@@ -7,13 +7,7 @@
       <form @submit.prevent="adminlogin">
         <h2>管理員登入</h2>
         <input type="text" name="manid" placeholder="管理員帳號" @blur="checkAcc" v-model="acc" />
-        <input
-          type="password"
-          name="manpsw"
-          placeholder="Password"
-          @blur="checkPsw"
-          v-model="psw"
-        />
+        <input type="password" name="manpsw" placeholder="密碼" @blur="checkPsw" v-model="psw" />
         <button type="submit">登入</button>
       </form>
     </div>
@@ -21,21 +15,22 @@
 </template>
 
 <script>
-import apiInstance from '@/plugin/api'
+// 從 stores 文件夾中引入 useAdminStore
 import { useAdminStore } from '/src/stores/admin.js'
 
 export default {
   data() {
     return {
-      acc: '',
-      psw: '',
+      acc: '', // 管理員帳號
+      psw: '', // 管理員密碼
       errorMsg: {
-        acc: '',
-        psw: ''
+        acc: '', // 帳號錯誤訊息
+        psw: '' // 密碼錯誤訊息
       }
     }
   },
   methods: {
+    // 檢查帳號是否為空
     checkAcc() {
       if (this.acc === '') {
         this.errorMsg.acc = '*請輸入帳號'
@@ -43,6 +38,7 @@ export default {
         this.errorMsg.acc = ''
       }
     },
+    // 檢查密碼是否為空
     checkPsw() {
       if (this.psw === '') {
         this.errorMsg.psw = '*請輸入密碼'
@@ -50,37 +46,54 @@ export default {
         this.errorMsg.psw = ''
       }
     },
+    // 管理員登入方法
     async adminlogin() {
       try {
-        const response = await apiInstance.post('http://localhost/api/admin.php', {
-          u_account: this.acc,
-          u_psw: this.psw
+        // 發送登入請求到後端 API
+        const response = await fetch('http://localhost/api/admin.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            u_account: this.acc,
+            u_psw: this.psw
+          })
         })
-        if (response.data.code === 1) {
+
+        // 解析後端返回的 JSON 數據
+        const data = await response.json()
+
+        if (data.code === 1) {
+          // 如果返回的 code 為 1，表示登入成功
           const adminStore = useAdminStore()
           adminStore.setCurrentUser({
-            id: response.data.adminInfo.am_id,
-            acc: response.data.adminInfo.am_acc
+            id: data.adminInfo.am_id, // 設置當前用戶的 ID
+            acc: data.adminInfo.am_acc // 設置當前用戶的帳號
           })
           alert('登入成功!')
           this.acc = ''
           this.psw = ''
-          this.$router.push('/backstage')
+          this.$router.push('/backstage') // 導向後台頁面
         } else {
-          alert(response.data.msg || '帳號或密碼錯誤!')
+          // 如果返回的 code 不為 1，表示登入失敗，顯示錯誤訊息
+          alert(data.msg || '帳號或密碼錯誤!')
           this.acc = ''
           this.psw = ''
         }
       } catch (error) {
+        // 處理請求錯誤
         console.error('登入失敗:', error)
         alert('登入失敗')
       }
     }
   },
   mounted() {
+    // 組件掛載時檢查是否已登入
     const adminStore = useAdminStore()
     adminStore.loadCurrentUser()
     if (adminStore.currentUser) {
+      // 如果已登入，直接導向後台頁面
       this.$router.push('/backstage')
     }
   }
