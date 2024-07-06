@@ -1,34 +1,23 @@
-// /src/stores/admin.js
 import { defineStore } from 'pinia'
 
 export const useAdminStore = defineStore('admin', {
   state: () => ({
-    currentUser: null,
-    currentUsername: null
+    currentUser: null
   }),
   actions: {
     setCurrentUser(user) {
       this.currentUser = user
+      localStorage.setItem('currentUser', JSON.stringify(user)) // 保存到本地存儲
+    },
+    loadCurrentUser() {
+      const user = JSON.parse(localStorage.getItem('currentUser'))
       if (user) {
-        this.currentUsername = user.username
-        localStorage.setItem('currentUser', JSON.stringify(user))
-      } else {
-        this.currentUsername = null
-        localStorage.removeItem('currentUser')
+        this.currentUser = user
       }
     },
     clearCurrentUser() {
       this.currentUser = null
-      this.currentUsername = null
       localStorage.removeItem('currentUser')
-    },
-    loadCurrentUser() {
-      const storedUser = localStorage.getItem('currentUser')
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser)
-        this.currentUser = parsedUser
-        this.currentUsername = parsedUser.username
-      }
     }
   }
 })
