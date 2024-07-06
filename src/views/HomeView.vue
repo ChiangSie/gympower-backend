@@ -31,8 +31,8 @@
     </aside>
     <main>
       <div class="mangeridshow">
-        <!-- <h2>使用者:{{ store.$state.currentAccount }}</h2> -->
-        <button class="sign-out" @click="memsignout()">登出</button>
+        <h2>使用者: {{ currentUsername }}</h2>
+        <button class="sign-out" @click="signOut">登出</button>
       </div>
       <div class="showplace">
         <router-view />
@@ -41,7 +41,24 @@
   </section>
 </template>
 
-<script></script>
+<script>
+import { useAdminStore } from '/src/stores/admin.js'
+import { mapState } from 'pinia'
+
+export default {
+  computed: {
+    ...mapState(useAdminStore, ['currentUsername'])
+  },
+  methods: {
+    signOut() {
+      const adminStore = useAdminStore()
+      adminStore.clearCurrentUser() // 清除 store 中的用戶數據
+      localStorage.removeItem('currentUser') // 清除 localStorage 中的用戶數據
+      this.$router.push('/') // 導航到登錄頁面
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 hr {
