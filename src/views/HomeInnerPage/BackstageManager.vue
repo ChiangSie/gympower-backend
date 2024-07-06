@@ -30,15 +30,6 @@
           <Button type="primary" @click="pswIdentify">送出</Button>
         </template>
       </Modal>
-      <!-- 燈箱 -->
-      <!-- <Input
-        class="search-input"
-        search
-        enter-button
-        placeholder="搜尋"
-        v-model="search"
-        style="width: 300px"
-      /> -->
     </div>
     <hr />
     <Table size="medium" :columns="columns" :data="mangerdata" id="table01" border>
@@ -84,9 +75,6 @@ export default {
     return {
       //燈箱
       modal2: false,
-      //搜尋
-      // search: '',
-      // searchedList: [],
       //新增管理員相關資料
       addAdminData: {
         id: '',
@@ -238,48 +226,34 @@ export default {
       }
     },
     addAdmin() {
-      // 數據驗證
-      if (!this.addAdminData.id || !this.addAdminData.acc || !this.addAdminData.psw) {
-        this.$Message.error('請填寫所有必要的字段')
+      if (!(this.addAdminData.id && this.addAdminData.acc && this.addAdminData.psw)) {
+        alert('請填寫所有輸入值')
         return
       }
-
-      // 準備要發送的數據
-      const newAdminData = {
-        am_id: this.addAdminData.id,
-        am_acc: this.addAdminData.acc,
-        am_psw: this.addAdminData.psw,
-        am_status: parseInt(this.addAdminData.status), // Ensure consistent data type
-        isEditing: true // Add this property to enable editing
-      }
-
-      // 發送 POST 請求到 PHP 後端
       fetch('http://localhost/api/add_admin.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newAdminData)
+        body: JSON.stringify(this.addAdminData)
       })
+        .then((response) => response.json())
         .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-          }
-          return response.json()
-        })
-        .then((data) => {
-          if (data.code === 200) {
-            // 添加成功
-            this.$Message.success(data.msg || '新增管理員成功')
-            this.cancelAndClear() // 清空表單並關閉燈箱
+          if (!response.error) {
+            //重新讀取資料庫
+            console.log(response)
+            this.fetchData()
+            //輸入清空
+            this.cancelAndClear()
+            //關閉燈箱
+            this.modal2 = false
+            // window.location.reload()
           } else {
-            // 添加失敗
-            throw new Error(data.msg || '新增管理員失敗')
+            alert(response.msg)
           }
         })
         .catch((error) => {
-          console.error('Error:', error)
-          this.$Message.error(error.message || '新增管理員過程中發生錯誤')
+          console.error('Error', error)
         })
     }
   },
