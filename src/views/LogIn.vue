@@ -58,18 +58,18 @@ export default {
           u_psw: this.psw
         })
         if (response.data.code === 1) {
-          // 登入成功
           const adminStore = useAdminStore()
           adminStore.setCurrentUser({
-            username: response.data.adminInfo.username // 假設 API 返回的數據中包含 username
-            // 可以根據需要添加其他用戶信息
+            username: response.data.adminInfo.username,
+            // 添加其他需要的用戶信息
+            id: response.data.adminInfo.id, // 假設API返回了用戶ID
+            role: response.data.adminInfo.role // 假設API返回了用戶角色
           })
           alert('登入成功!')
           this.acc = ''
           this.psw = ''
           this.$router.push('/backstage')
         } else {
-          // 登入失敗
           alert(response.data.msg || '帳號或密碼錯誤!')
           this.acc = ''
           this.psw = ''
@@ -78,6 +78,15 @@ export default {
         console.error('登入失敗:', error)
         alert('登入失敗')
       }
+    }
+  },
+  mounted() {
+    // 在組件掛載時檢查是否有存儲的用戶信息
+    const adminStore = useAdminStore()
+    adminStore.loadCurrentUser()
+    if (adminStore.currentUser) {
+      // 如果有存儲的用戶信息,直接跳轉到後台頁面
+      this.$router.push('/backstage')
     }
   }
 }

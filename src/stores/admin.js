@@ -1,31 +1,33 @@
+// /src/stores/admin.js
 import { defineStore } from 'pinia'
 
 export const useAdminStore = defineStore('admin', {
   state: () => ({
     currentUser: null,
-    currentAccount: null // 新增用來存儲當前用戶帳號的狀態
+    currentUsername: null
   }),
   actions: {
     setCurrentUser(user) {
       this.currentUser = user
       if (user) {
-        this.currentAccount = user.am_acc // 提取並儲存用戶帳號
+        this.currentUsername = user.username
         localStorage.setItem('currentUser', JSON.stringify(user))
       } else {
-        this.currentAccount = null // 清空帳號資料
+        this.currentUsername = null
+        localStorage.removeItem('currentUser')
       }
     },
     clearCurrentUser() {
       this.currentUser = null
-      this.currentAccount = null // 清空帳號資料
+      this.currentUsername = null
       localStorage.removeItem('currentUser')
     },
     loadCurrentUser() {
-      const user = localStorage.getItem('currentUser')
-      if (user) {
-        const parsedUser = JSON.parse(user)
+      const storedUser = localStorage.getItem('currentUser')
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser)
         this.currentUser = parsedUser
-        this.currentAccount = parsedUser.account
+        this.currentUsername = parsedUser.username
       }
     }
   }
