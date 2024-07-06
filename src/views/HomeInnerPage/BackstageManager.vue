@@ -2,6 +2,7 @@
   <section class="bsm">
     <h2>後台人員管理</h2>
     <div class="bsmtop">
+      <!-- 新增管理員button -->
       <button @click="modal2 = true" style="width: 120px; height: 30px">
         <i class="fa-solid fa-plus"></i>新增
       </button>
@@ -21,7 +22,7 @@
             新增密碼：<Input type="password" v-model="addAdminData.psw" />
           </Space>
           <Space style="position: relative; right: 14px">
-            再次輸入密碼：<Input type="password" v-model="addAdminData.firstpsw" />
+            再次輸入密碼：<Input type="password" v-model="firstpsw" />
           </Space>
         </div>
         <template #footer>
@@ -81,24 +82,27 @@
 export default {
   data() {
     return {
-      //<燈箱
+      //燈箱
       modal2: false,
-      //<搜尋
+      //搜尋
       // search: '',
       // searchedList: [],
-      //<新增管理員
+      //新增管理員相關資料
       addAdminData: {
         id: '',
         acc: '',
         psw: '',
         status: 1
       },
-      //<第一次輸入密碼
+      //管理員密碼再輸入
       firstpsw: '',
+      //修改管理員狀態
       editAdminData: {
         status: ''
       },
+      //資料庫抓取資料存放
       mangerdata: [],
+      //table標題
       columns: [
         {
           title: '編號',
@@ -143,6 +147,8 @@ export default {
     this.fetchData()
   },
   methods: {
+    //發送 POST 請求到 PHP 後端
+    //資料庫抓取資料
     fetchData() {
       fetch('http://localhost/api/get_admin.php', {
         method: 'POST',
@@ -171,32 +177,21 @@ export default {
           console.error('獲取數據時出錯:', error)
         })
     },
-    cancelAndClear() {
-      this.addAdminData = {
-        id: '',
-        acc: '',
-        psw: '',
-        status: 1
-      }
-      // 清空 firstpsw
-      this.firstpsw = ''
-      // 關閉燈箱
-      this.modal2 = false
-    },
+    //編輯button
     editAdmin(row) {
-      // Set the row to editing mode
+      // 設定設定模式
       row.isEditing = true
-      // Initialize the editCoachData with the current row's values
       this.editAdminData.status = row.am_status
     },
+    //儲存button
     saveAdmin(row) {
-      // 準備要發送的數據
+      // 發送的資料
       const updatedData = {
         am_no: row.am_no,
         am_status: row.am_status
       }
-
       // 發送 POST 請求到 PHP 後端
+      // 將更新內容寫入資料庫
       fetch('http://localhost/api/update_admin.php', {
         method: 'POST',
         headers: {
@@ -207,9 +202,6 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           if (data.code === 200 || !data.error) {
-            // 檢查兩種可能的成功響應
-            // 更新成功，更新本地數據
-
             row.isEditing = false
             this.$Message.success(data.msg || '教練資料更新成功')
           } else {
@@ -222,13 +214,73 @@ export default {
           this.$Message.error('更新過程中發生錯誤')
         })
     },
-    pswIdentify() {
-      if (this.addAdminData.psw !== this.firstpsw) {
-        this.$Message.error('密碼與再次輸入密碼不相符')
-      } else {
-        // 進行提交操作
-        this.submitAdminData()
+    //清空新增管理員燈箱的資料
+    cancelAndClear() {
+      this.addAdminData = {
+        id: '',
+        acc: '',
+        psw: '',
+        status: 1
       }
+      // 清空 firstpsw
+      this.firstpsw = ''
+      // 關閉燈箱
+      this.modal2 = false
+    },
+    //新增管理員
+    pswIdentify() {
+      if (this.firstpsw == this.addAdminData.psw) {
+        // 密碼一致，執行提交操作
+        this.addAdmin()
+      } else {
+        // 密碼不一致，彈出提示
+        alert('兩次輸入的密碼不一致')
+      }
+    },
+    addAdmin() {
+      // 數據驗證
+      if (!this.addAdminData.id || !this.addAdminData.acc || !this.addAdminData.psw) {
+        this.$Message.error('請填寫所有必要的字段')
+        return
+      }
+
+      // 準備要發送的數據
+      const newAdminData = {
+        am_id: this.addAdminData.id,
+        am_acc: this.addAdminData.acc,
+        am_psw: this.addAdminData.psw,
+        am_status: parseInt(this.addAdminData.status), // Ensure consistent data type
+        isEditing: true // Add this property to enable editing
+      }
+
+      // 發送 POST 請求到 PHP 後端
+      fetch('http://localhost/api/add_admin.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newAdminData)
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+          return response.json()
+        })
+        .then((data) => {
+          if (data.code === 200) {
+            // 添加成功
+            this.$Message.success(data.msg || '新增管理員成功')
+            this.cancelAndClear() // 清空表單並關閉燈箱
+          } else {
+            // 添加失敗
+            throw new Error(data.msg || '新增管理員失敗')
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+          this.$Message.error(error.message || '新增管理員過程中發生錯誤')
+        })
     }
   },
   watch: {},
