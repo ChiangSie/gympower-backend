@@ -4,14 +4,14 @@
       <div class="loginpic">
         <img src="/src/assets/img/small logo.png" alt="" />
       </div>
-      <form @submit.prevent="adminlogin()">
+      <form @submit.prevent="adminlogin">
         <h2>管理員登入</h2>
-        <input type="text" name="manid" placeholder="管理員帳號" @blur="checkAcc()" v-model="acc" />
+        <input type="text" name="manid" placeholder="管理員帳號" @blur="checkAcc" v-model="acc" />
         <input
           type="password"
           name="manpsw"
           placeholder="Password"
-          @blur="checkPsw()"
+          @blur="checkPsw"
           v-model="psw"
         />
         <button type="submit">登入</button>
@@ -22,7 +22,7 @@
 
 <script>
 import apiInstance from '@/plugin/api'
-import { useAdminStore } from '/src/stores/admin.js' // 引入 Pinia store
+import { useAdminStore } from '/src/stores/admin.js'
 
 export default {
   data() {
@@ -36,7 +36,6 @@ export default {
     }
   },
   methods: {
-    // 確認帳號欄位密碼欄位有輸入值
     checkAcc() {
       if (this.acc === '') {
         this.errorMsg.acc = '*請輸入帳號'
@@ -60,10 +59,8 @@ export default {
         if (response.data.code === 1) {
           const adminStore = useAdminStore()
           adminStore.setCurrentUser({
-            username: response.data.adminInfo.username,
-            // 添加其他需要的用戶信息
-            id: response.data.adminInfo.id, // 假設API返回了用戶ID
-            role: response.data.adminInfo.role // 假設API返回了用戶角色
+            id: response.data.adminInfo.am_id,
+            acc: response.data.adminInfo.am_acc
           })
           alert('登入成功!')
           this.acc = ''
@@ -81,11 +78,9 @@ export default {
     }
   },
   mounted() {
-    // 在組件掛載時檢查是否有存儲的用戶信息
     const adminStore = useAdminStore()
     adminStore.loadCurrentUser()
     if (adminStore.currentUser) {
-      // 如果有存儲的用戶信息,直接跳轉到後台頁面
       this.$router.push('/backstage')
     }
   }
