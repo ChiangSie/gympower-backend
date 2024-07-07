@@ -98,7 +98,7 @@ export default {
         },
         {
           title: '文章內容',
-          key: 'r_Ccontent',
+          key: 'r_content',
           slot: 'r_content',
           align: 'center',
           width: 500
@@ -172,11 +172,11 @@ export default {
       } else {
         this.searchedList = this.DiaryData.filter(
           (diary) =>
-            diary.r_time.toString().includes(this.search) ||
-            diary.r_name.includes(this.search) ||
-            diary.r_type.includes(this.search) ||
+            diary.r_memid.toString().includes(this.search) ||
+            diary.r_time.includes(this.search) ||
+            this.getTypeLabel(diary.r_type).includes(this.search) ||
             diary.r_reason.includes(this.search) ||
-            diary.r_title.includes(this.search)
+            diary.r_content.includes(this.search)
         )
       }
     },

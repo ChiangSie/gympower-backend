@@ -9,10 +9,7 @@
         <button>取消訂單</button>
       </div>
       <div class="bento_func">
-        <button @click="modal2 = true" style="width: 120px; height: 30px">
-          <i class="fa-solid fa-plus"></i>新增
-        </button>
-        <Input class="search-input" search enter-button placeholder="搜尋" style="width: 200px" />
+        <Input class="search-input" search enter-button placeholder="搜尋" style="width: 300px" />
       </div>
     </div>
     <hr />
