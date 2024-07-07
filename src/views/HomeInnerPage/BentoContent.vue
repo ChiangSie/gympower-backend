@@ -9,11 +9,29 @@
         <button>配料</button>
       </div>
       <div class="bento_func">
-        <Input class="search-input" search enter-button placeholder="搜尋" style="width: 300px" />
+        <button @click="modal2 = true" style="width: 120px; height: 30px">
+          <i class="fa-solid fa-plus"></i>新增
+        </button>
+        <Input
+          class="search-input"
+          search
+          enter-button
+          placeholder="搜尋"
+          style="width: 200px"
+          v-model="search"
+        />
       </div>
+
+      <modal
+        title="新增食材"
+        v-model="modal2"
+        :mask-closable="false"
+        class-name="vertical-center-modal "
+      >
+      </modal>
     </div>
     <hr />
-    <Table size="medium" :columns="columns" :data="BentoContentData">
+    <Table size="medium" :columns="columns" :data="searchedList" border>
       <template #fd_id="{ row }">
         <strong>{{ row.fd_id }}</strong>
       </template>
@@ -104,6 +122,8 @@
 export default {
   data() {
     return {
+      search: '',
+      searchedList: [],
       BentoContentData: [],
       editBentoData: {
         name: '',
@@ -213,6 +233,7 @@ export default {
               ...item,
               fd_status: parseInt(item.fd_status)
             }))
+            this.updateSearchedList()
           } else {
             console.error('API返回錯誤:', json.msg)
           }
@@ -220,6 +241,18 @@ export default {
         .catch((error) => {
           console.error('獲取數據時出錯:', error)
         })
+    },
+    updateSearchedList() {
+      if (this.search.trim() === '') {
+        this.searchedList = this.BentoContentData
+      } else {
+        this.searchedList = this.BentoContentData.filter(
+          (BentoContent) =>
+            BentoContent.fd_id.toString().includes(this.search) ||
+            BentoContent.fd_name.includes(this.search) ||
+            BentoContent.fd_price.toString().includes(this.search)
+        )
+      }
     },
     editBentoCon(row) {
       row.isEditing = true
@@ -277,7 +310,9 @@ export default {
         })
     }
   },
-  watch: {}
+  watch: {
+    search: 'updateSearchedList'
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -310,6 +345,11 @@ hr {
         margin: 0 10px;
         padding: 0 10px;
       }
+    }
+    .bento_func {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
     }
   }
 }

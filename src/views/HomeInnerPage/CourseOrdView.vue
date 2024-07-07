@@ -156,7 +156,7 @@ hr {
   .cstop {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
     margin: 10px 0;
     height: 60px;

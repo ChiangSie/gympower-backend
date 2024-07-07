@@ -31,7 +31,7 @@
     </aside>
     <main>
       <div class="mangeridshow">
-        <h2>使用者: {{ currentUsername }}</h2>
+        <!-- <h2>使用者: {{ store.$state.currentId }}</h2> -->
         <button class="sign-out" @click="signOut">登出</button>
       </div>
       <div class="showplace">
