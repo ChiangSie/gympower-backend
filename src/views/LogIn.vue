@@ -50,7 +50,7 @@ export default {
     async adminlogin() {
       try {
         // 發送登入請求到後端 API
-        const response = await fetch('http://localhost/api/admin.php', {
+        const response = await fetch(`${import.meta.env.VITE_PHP_URL}admin.php`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
