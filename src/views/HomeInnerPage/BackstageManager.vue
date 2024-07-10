@@ -138,7 +138,7 @@ export default {
     //發送 POST 請求到 PHP 後端
     //資料庫抓取資料
     fetchData() {
-      fetch('http://localhost/api/get_admin.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}get_admin.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

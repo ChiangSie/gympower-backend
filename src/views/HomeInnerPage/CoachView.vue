@@ -175,6 +175,7 @@ export default {
         coachinfo1: '',
         coachinfo2: ''
       },
+      //編輯資料所需的表格
       editCoachData: {
         img: '',
         licc: '',
@@ -199,7 +200,7 @@ export default {
   },
   methods: {
     fetchData() {
-      fetch('http://localhost/api/get_coach.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}get_coach.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -35,12 +35,9 @@
           <div>
             <h4>教練</h4>
             <Select v-model="addCourseConData.coach" style="width: 200px" placeholder="請選擇教練">
-              <Option :value="1">1</Option>
-              <Option :value="2">2</Option>
-              <Option :value="3">3</Option>
-              <Option :value="4">4</Option>
-              <Option :value="5">5</Option>
-              <Option :value="6">6</Option>
+              <Option v-for="item in coachlist" :key="item.coach_id" :value="item.coach_id">{{
+                item.coach_name
+              }}</Option>
             </Select>
           </div>
           <br />
@@ -62,12 +59,9 @@
               <h4>選擇時段</h4>
               <TimePicker
                 :steps="[1, 30]"
-                format="HH:mm"
-                type="timerange"
-                placement="bottom-end"
-                placeholder="Select Time"
+                type="time"
+                placeholder="Select time"
                 style="width: 168px"
-                v-model="addCourseConData.time"
               />
             </div>
             <div>
@@ -285,11 +279,12 @@ export default {
           align: 'center',
           width: 100
         }
-      ]
+      ],
+      coachlist: []
     }
   },
   mounted() {
-    this.fetchData()
+    this.fetchData(), this.fetchCoach()
   },
   methods: {
     cancelAndClear() {
@@ -307,6 +302,35 @@ export default {
         hot: 0,
         people: ''
       }
+    },
+    fetchCoach() {
+      fetch(`${import.meta.env.VITE_PHP_URL}get_course_con.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then((json) => {
+          if (json.code === 200) {
+            this.coachlist = json.data.list.map((item) => ({
+              ...item,
+              coach_rcm: parseInt(item.coach_rcm)
+            }))
+            this.updateSearchedList()
+          } else {
+            console.error('API返回錯誤:', json.msg)
+          }
+        })
+        .catch((error) => {
+          console.error('獲取數據時出錯:', error)
+        })
     },
     fetchData() {
       fetch('http://localhost/api/get_course_con.php', {
