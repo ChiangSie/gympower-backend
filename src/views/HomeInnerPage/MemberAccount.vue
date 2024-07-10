@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     fetchData() {
-      fetch('http://localhost/api/get_member.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}get_member.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

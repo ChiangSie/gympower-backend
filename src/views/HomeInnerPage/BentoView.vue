@@ -75,7 +75,7 @@ export default {
   },
   metheds: {
     fetchData() {
-      fetch('http://localhost/api/get_bentolist.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}get_bentolist.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -102,7 +102,7 @@ export default {
   },
   metheds: {
     fetchData() {
-      fetch('http://localhost/api/get_course_ord.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}get_course_ord.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
