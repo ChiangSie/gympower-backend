@@ -180,7 +180,7 @@ export default {
       }
       // 發送 POST 請求到 PHP 後端
       // 將更新內容寫入資料庫
-      fetch('http://localhost/api/update_admin.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}update_admin.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -230,7 +230,7 @@ export default {
         alert('請填寫所有輸入值')
         return
       }
-      fetch('http://localhost/api/add_admin.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}add_admin.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

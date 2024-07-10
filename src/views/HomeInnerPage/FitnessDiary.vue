@@ -190,7 +190,7 @@ export default {
         r_status: row.r_status
       }
 
-      fetch('http://localhost/api/update_report.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}update_report.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

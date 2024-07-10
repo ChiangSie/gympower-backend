@@ -333,7 +333,7 @@ export default {
         })
     },
     fetchData() {
-      fetch('http://localhost/api/get_course_con.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}get_course_con.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -392,7 +392,7 @@ export default {
         c_status: row.c_status
       }
       // 發送 POST 請求到 PHP 後端
-      fetch('http://localhost/api/update_course_con.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}update_course_con.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -436,7 +436,7 @@ export default {
           formData.append(key, this.addCourseConData[key])
         }
       }
-      fetch('http://localhost/api/add_course_con.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}add_course_con.php`, {
         method: 'POST',
         body: formData
       })

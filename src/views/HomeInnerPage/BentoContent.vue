@@ -282,7 +282,7 @@ export default {
         fd_status: row.fd_status
       }
       // 發送 POST 請求到 PHP 後端
-      fetch('http://localhost/api/update_food.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}update_food.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

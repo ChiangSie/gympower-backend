@@ -190,7 +190,7 @@ export default {
       }
 
       // 發送 POST 請求到 PHP 後端
-      fetch('http://localhost/api/update_member.php', {
+      fetch(`${import.meta.env.VITE_PHP_URL}update_member.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
