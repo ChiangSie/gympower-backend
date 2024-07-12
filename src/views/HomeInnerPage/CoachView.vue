@@ -17,9 +17,9 @@
             教練名稱：<Input v-model="addcoachData.coachname" />
           </Space>
           <Space class="addInput" style="position: relative; left: 14.5px">
-            內容：<Input v-model="addcoachData.coachinfo1" />
+            內容：<Input v-model="addcoachData.eintro" />
           </Space>
-          <Space class="addInput"> 專業證照：<Input v-model="addcoachData.coachinfo2" /> </Space>
+          <Space class="addInput"> 專業領域：<Input v-model="addcoachData.etag" /> </Space>
           <Space class="addInput" style="position: relative; left: -74px">
             推薦教練：
             <Switch
@@ -58,10 +58,10 @@
         </div>
       </template>
       <!-- 教練證照 -->
-      <template #coach_licc="{ row }">
-        <div v-if="row.isEditing"><input v-model="editCoachData.licc" type="text" /></div>
+      <template #tag="{ row }">
+        <div v-if="row.isEditing"><input v-model="editCoachData.tag" type="text" /></div>
         <div v-else>
-          <strong>{{ row.coach_licc }}</strong>
+          <strong>{{ row.tag }}</strong>
         </div>
       </template>
       <!-- 推薦教練 -->
@@ -76,17 +76,17 @@
         />
       </template>
       <!-- 教練介紹 -->
-      <template #coach_info="{ row }">
+      <template #intro="{ row }">
         <div v-if="row.isEditing">
           <textarea
-            v-model="editCoachData.info"
+            v-model="editCoachData.intro"
             cols="30"
             rows="10"
             style="width: 95%; aspect-ratio: 2/1; margin: 10px auto"
           ></textarea>
         </div>
         <div v-else>
-          <strong>{{ row.coach_info }}</strong>
+          <strong>{{ row.intro }}</strong>
         </div>
       </template>
       <!-- 編輯按鈕 -->
@@ -139,9 +139,9 @@ export default {
           width: 250
         },
         {
-          title: '專業證照',
-          key: 'coach_licc',
-          slot: 'coach_licc',
+          title: '專業領域',
+          key: 'tag',
+          slot: 'tag',
           align: 'center',
           width: 200
         },
@@ -154,8 +154,8 @@ export default {
         },
         {
           title: '教練簡介',
-          key: 'coach_info',
-          slot: 'coach_info',
+          key: 'intro',
+          slot: 'intro',
           align: 'center',
           width: 400
         },
@@ -170,17 +170,13 @@ export default {
       // coachData為php撈table資料的儲存處
       coachData: [],
       // addcoachData為新增表格所需
-      addcoachData: {
-        coachname: '',
-        coachinfo1: '',
-        coachinfo2: ''
-      },
+      addcoachData: {},
       //編輯資料所需的表格
       editCoachData: {
         img: '',
-        licc: '',
+        intro: '',
         status: '',
-        info: ''
+        tag: ''
       }
     }
   },
@@ -230,8 +226,8 @@ export default {
     cancelAndClear() {
       this.addcoachData = {
         coachname: '',
-        coachinfo1: '',
-        coachinfo2: '',
+        eintro: '',
+        etag: '',
         status: 1
       }
       // 關閉燈箱
@@ -242,8 +238,8 @@ export default {
       row.isEditing = true
       // Initialize the editCoachData with the current row's values
       this.editCoachData.img = row.coach_img
-      this.editCoachData.licc = row.coach_licc
-      this.editCoachData.info = row.coach_info
+      this.editCoachData.tag = row.tag
+      this.editCoachData.intro = row.intro
       this.editCoachData.status = row.coach_status
     },
     saveCoach(row) {
@@ -251,8 +247,8 @@ export default {
       const updatedData = {
         coach_id: row.coach_id,
         coach_img: this.editCoachData.img,
-        coach_licc: this.editCoachData.licc,
-        coach_info: this.editCoachData.info,
+        tag: this.editCoachData.tag,
+        intro: this.editCoachData.intro,
         coach_rcm: row.coach_rcm
       }
 
@@ -268,8 +264,8 @@ export default {
         .then((data) => {
           if (data.code === 200 || !data.error) {
             row.coach_img = this.editCoachData.img
-            row.coach_licc = this.editCoachData.licc
-            row.coach_info = this.editCoachData.info
+            row.tag = this.editCoachData.tag
+            row.intro = this.editCoachData.intro
             row.isEditing = false
             this.$Message.success(data.msg || '教練資料更新成功')
           } else {
