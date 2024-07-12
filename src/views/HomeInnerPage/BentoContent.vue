@@ -2,14 +2,14 @@
   <section class="bo">
     <h2>餐點管理</h2>
     <div class="botop">
-      <div class="bento_filter">
+      <!-- <div class="bento_filter">
         <button>全部</button>
         <button>主食</button>
         <button>肉類</button>
         <button>蔬菜類</button>
         <button>海鮮類</button>
         <button>蛋豆類</button>
-      </div>
+      </div> -->
       <div class="bento_func">
         <button @click="modal2 = true" style="width: 120px; height: 30px">
           <i class="fa-solid fa-plus"></i>新增
@@ -337,7 +337,7 @@ hr {
   .botop {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
     margin: 10px 0;
     height: 60px;

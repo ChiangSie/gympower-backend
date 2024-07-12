@@ -2,12 +2,12 @@
   <section class="fd">
     <h2>健身日記檢舉</h2>
     <div class="fdtop">
-      <div class="fd_filter">
+      <!-- <div class="fd_filter">
         <button @click="filter('')">全部</button>
         <button @click="filter('已下架')">已下架</button>
         <button @click="filter('未處理')">未處理</button>
         <button @click="filter('已處理')">已處理</button>
-      </div>
+      </div> -->
       <Input
         class="search-input"
         search
@@ -261,7 +261,7 @@ hr {
   .fdtop {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin: 10px 0;
     height: 60px;
     .fd_filter {
