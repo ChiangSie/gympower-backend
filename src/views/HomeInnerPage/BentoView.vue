@@ -2,12 +2,12 @@
   <section class="bc">
     <h2>餐盒訂單管理</h2>
     <div class="bctop">
-      <div class="bento_filter">
+      <!-- <div class="bento_filter">
         <button>全部</button>
         <button>未取貨</button>
         <button>已完成訂單</button>
         <button>取消訂單</button>
-      </div>
+      </div> -->
       <div class="bento_func">
         <Input class="search-input" search enter-button placeholder="搜尋" style="width: 300px" />
       </div>
@@ -123,7 +123,7 @@ hr {
   .bctop {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     margin: 10px 0;
     height: 60px;
