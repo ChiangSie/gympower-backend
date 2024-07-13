@@ -13,7 +13,7 @@
       </div>
     </div>
     <hr />
-    <Table size="medium" :columns="columns" :data="BentoListData" border></Table>
+    <Table size="medium" height="450" :columns="columns" :data="BentoListData" border></Table>
   </section>
 </template>
 <script>

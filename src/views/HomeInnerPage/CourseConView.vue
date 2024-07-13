@@ -133,7 +133,7 @@
       </div>
     </div>
     <hr />
-    <Table size="medium" :columns="columns" :data="searchedList" border>
+    <Table size="medium" height="450" :columns="columns" :data="searchedList" border>
       <template #c_name="{ row }">
         <strong>{{ row.c_name }}</strong>
       </template>

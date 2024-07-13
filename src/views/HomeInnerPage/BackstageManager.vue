@@ -32,7 +32,7 @@
       </Modal>
     </div>
     <hr />
-    <Table size="medium" :columns="columns" :data="mangerdata" id="table01" border>
+    <Table size="medium" height="450" :columns="columns" :data="mangerdata" id="table01" border>
       <template #am_id="{ row }">
         <strong>{{ row.am_id }}</strong>
       </template>

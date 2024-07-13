@@ -22,9 +22,9 @@
       <template #mem_phone="{ row }">
         <strong>{{ row.mem_phone }}</strong>
       </template>
-      <template #mem_img="{ row }">
+      <!-- <template #mem_img="{ row }">
         <strong>{{ row.mem_img }}</strong>
-      </template>
+      </template> -->
       <template #mem_email="{ row }">
         <strong>{{ row.mem_email }}</strong>
       </template>
@@ -87,13 +87,13 @@ export default {
           align: 'center',
           width: 200
         },
-        {
-          title: '會員頭像',
-          key: 'mem_img',
-          slot: 'mem_img',
-          align: 'center',
-          width: 200
-        },
+        // {
+        //   title: '會員頭像',
+        //   key: 'mem_img',
+        //   slot: 'mem_img',
+        //   align: 'center',
+        //   width: 200
+        // },
         {
           title: '電子信箱',
           key: 'mem_email',

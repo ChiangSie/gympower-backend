@@ -18,10 +18,10 @@
         <hr /> -->
         <router-link to="/course_content">課程資訊管理</router-link>
         <hr />
-        <router-link to="/course_order">課程訂單管理</router-link>
-        <hr />
-        <router-link to="/bento">餐盒訂單管理</router-link>
-        <hr />
+        <!-- <router-link to="/course_order">課程訂單管理</router-link> -->
+        <!-- <hr /> -->
+        <!-- <router-link to="/bento">餐盒訂單管理</router-link> -->
+        <!-- <hr /> -->
         <router-link to="/bentocontent">餐點管理</router-link>
         <hr />
         <router-link to="/coach">教練管理</router-link>

@@ -33,7 +33,7 @@
       </modal>
     </div>
     <hr />
-    <Table size="medium" :columns="columns" :data="searchedList" border>
+    <Table size="medium" height="450" :columns="columns" :data="searchedList" border>
       <template #fd_id="{ row }">
         <strong>{{ row.fd_id }}</strong>
       </template>
@@ -77,14 +77,14 @@
           <strong>{{ row.fd_fat }}</strong>
         </div>
       </template>
-      <template #fd_img="{ row }">
+      <!-- <template #fd_img="{ row }">
         <div v-if="row.isEditing">
           <input type="file" v-on="editBentoData.img" style="width: 90%" />
         </div>
         <div v-else>
           <strong>{{ row.fd_img }}</strong>
         </div>
-      </template>
+      </template> -->
       <template #fd_price="{ row }">
         <div v-if="row.isEditing">
           <input type="text" v-model="editBentoData.price" style="width: 90%" />
@@ -180,13 +180,13 @@ export default {
           align: 'center',
           width: 120
         },
-        {
-          title: '食材照片',
-          key: 'fd_img',
-          slot: 'fd_img',
-          align: 'center',
-          width: 250
-        },
+        // {
+        //   title: '食材照片',
+        //   key: 'fd_img',
+        //   slot: 'fd_img',
+        //   align: 'center',
+        //   width: 250
+        // },
         {
           title: '價格',
           key: 'fd_price',
